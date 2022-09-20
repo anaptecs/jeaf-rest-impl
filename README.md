@@ -1,6 +1,6 @@
 # JEAF REST Impl README #
 
-JEAF REST Impl different types of implements for the API that is defined by JEAF REST API projects.
+JEAF REST Impl conmtains different types of implementations for the API that is defined by JEAF REST API projects.
 
 ## Links ##
 For further information please refer to:
