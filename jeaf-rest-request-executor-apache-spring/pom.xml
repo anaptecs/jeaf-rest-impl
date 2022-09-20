@@ -12,10 +12,6 @@
 	<artifactId>jeaf-rest-request-executor-apache-spring</artifactId>
 	<packaging>jar</packaging>
 	
-	<properties>
-		<spring.core.version>5.3.22</spring.core.version>
-	</properties>
-
 	<dependencies>
 		<dependency>
 			<groupId>com.anaptecs.jeaf.rest</groupId>
@@ -38,13 +34,13 @@
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-api</artifactId>
-			<version>1.7.25</version>
+			<version>${slf4j-api.version}</version>
 		</dependency>
 
 		<dependency>
 			<groupId>org.zalando</groupId>
 			<artifactId>problem-spring-web</artifactId>
-			<version>0.23.0</version>
+			<version>${zalando.problem.version}</version>
 		</dependency>
 	</dependencies>
 </project>
