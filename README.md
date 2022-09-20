@@ -5,7 +5,7 @@ JEAF REST Impl different types of implements for the API that is defined by JEAF
 ## Links ##
 For further information please refer to:
 
-* [JEAF REST](https://anaptecs.atlassian.net/l/c/fBmaPk18)
+* [JEAF REST](https://anaptecs.atlassian.net/l/cp/JGQPmj6k)
 * [Maven Repository](https://search.maven.org/artifact/com.anaptecs.jeaf.rest/jeaf-rest-impl-project)
 * [Javadoc](https://javadoc.io/doc/com.anaptecs.jeaf.rest/jeaf-rest-impl)
 
