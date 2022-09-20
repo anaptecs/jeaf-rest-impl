@@ -16,7 +16,9 @@ import org.yaml.snakeyaml.constructor.Constructor;
 import org.yaml.snakeyaml.introspector.BeanAccess;
 
 /**
- * Class provides all the configuration parameters that are required by REST Proxy Service implementation.
+ * Class provided a {@link RESTClientConfiguration} that reads all required configuration parameters from a YAML file.
+ * 
+ * @author JEAF Development Team
  */
 public class YAMLBasedRESTClientConfiguration implements RESTClientConfiguration {
   /**

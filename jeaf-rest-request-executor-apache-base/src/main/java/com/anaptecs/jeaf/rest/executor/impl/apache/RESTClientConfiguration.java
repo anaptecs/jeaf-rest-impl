@@ -9,6 +9,8 @@ import java.util.List;
 
 /**
  * Class provides all the configuration parameters that are required by REST Proxy Service implementation.
+ * 
+ * @author JEAF Development Team
  */
 public interface RESTClientConfiguration {
   /**

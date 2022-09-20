@@ -58,30 +58,23 @@ import io.github.resilience4j.circuitbreaker.CircuitBreakerConfig;
 import io.github.resilience4j.circuitbreaker.CircuitBreakerRegistry;
 
 /**
- * Class implements a {@link RESTRequestExecutor} that is based on Apache HTTP Client and Resilience4J circuit breaker.
+ * Class implements a {@link RESTRequestExecutor} base class that is based on Apache HTTP Client and Resilience4J
+ * circuit breaker.
+ * 
+ * This implementation can be used to build up your own {@link RESTRequestExecutor}. Therefore you need to implement the
+ * following aspects:
+ * </ul>
+ * <li>Loading of configuration for each service ({@link #getConfiguration(Class)}</li>
+ * <li>Writing of request and response log. String representation is already provided ({@link #traceRequest(String)},
+ * {@link #traceResponse(String)})</li>
+ * <li>Conversion of exceptions into problems (){@link #processInternalServerError(URI, Exception, String)},
+ * {@link #processErrorResponse(URI, CloseableHttpResponse)}</li>
+ * <li>Lookup for matching JSON Object Mapper ({@link #getObjectMapper()})</li>
+ * </ul>
  * 
  * @author JEAF Development Team
  */
 public abstract class AbstractApacheHttpClientRESTRequestExecutorBase implements RESTRequestExecutor {
-  protected abstract ObjectMapper getObjectMapper( );
-
-  protected abstract boolean isRequestTracingEnabled( RESTClientConfiguration pConfiguration );
-
-  protected abstract boolean isResponseTracingEnabled( RESTClientConfiguration pConfiguration );
-
-  protected abstract void traceRequest( String pRequestLog );
-
-  protected abstract void traceResponse( String pResponseLog );
-
-  protected abstract void traceException( String pErrorMessage, Exception pException );
-
-  protected abstract RuntimeException processErrorResponse( URI pRequestURI, CloseableHttpResponse pResponse );
-
-  protected abstract RuntimeException processInternalServerError( URI pRequestURI, Exception pException,
-      String pContext );
-
-  protected abstract RESTClientConfiguration getConfiguration( Class<?> pServiceClass );
-
   /**
    * Map contains all http client instances that are already created. Implementation of this class assumes that there
    * are independent instances for each REST service.
@@ -93,6 +86,88 @@ public abstract class AbstractApacheHttpClientRESTRequestExecutorBase implements
    * independent instances for each REST service.
    */
   private Map<Class<?>, CircuitBreaker> circuitBreakers = new HashMap<>();
+
+  /**
+   * Method returns the JSON Object Mapper that should be used to serialize from Java to JSON and vice versa.
+   * 
+   * @return {@link ObjectMapper} Jackson object mapper that should be used. The method mmust not return null.
+   */
+  protected abstract ObjectMapper getObjectMapper( );
+
+  /**
+   * Method checks if request tracing for the REST service with the passed configuration is enabled.
+   * 
+   * @param pConfiguration Configuration of the REST service. The parameter is never null.
+   * @return boolean Method returns true if request tracing is enabled and otherwise false.
+   */
+  protected abstract boolean isRequestTracingEnabled( RESTClientConfiguration pConfiguration );
+
+  /**
+   * Method checks if response tracing for the REST service with the passed configuration is enabled.
+   * 
+   * @param pConfiguration Configuration of the REST service. The parameter is never null.
+   * @return boolean Method returns true if response tracing is enabled and otherwise false.
+   */
+  protected abstract boolean isResponseTracingEnabled( RESTClientConfiguration pConfiguration );
+
+  /**
+   * Method traces the passed request. The request itself was already converted into a String representation.
+   * 
+   * @param pRequestLog String representation of the request that should be traced. The parameter must not be null.
+   */
+  protected abstract void traceRequest( String pRequestLog );
+
+  /**
+   * Method traces the passed response. The response itself was already converted into a String representation.
+   * 
+   * @param pRequestLog String representation of the request that should be traced. The parameter must not be null.
+   */
+  protected abstract void traceResponse( String pResponseLog );
+
+  /**
+   * Method is called during request execution in case that an exception occurs. This method is responsible to trace the
+   * passed exception together with the error message.
+   * 
+   * @param pErrorMessage Error message describing the occurred problem. The parameter must not be null.
+   * @param pException Exception that occurred during request execution.
+   */
+  protected abstract void traceException( String pErrorMessage, Exception pException );
+
+  /**
+   * Method will be called in case that an REST resource returned an error. It is expected that this method creates a
+   * description of the Problem and returns it as {@link RuntimeException} e.g. using Zalando Problem library.
+   * 
+   * @param pRequestURI URI of the request. The parameter must not be null.
+   * @param pResponse Apache HTTP Client response that was received from the REST resource.
+   * @return {@link RuntimeException} Runtime exception representing the occurred problem. The method must not return
+   * null.
+   */
+  protected abstract RuntimeException processErrorResponse( URI pRequestURI, CloseableHttpResponse pResponse );
+
+  /**
+   * This method will be called in case that an internal error occurs during REST request execution. It is expected that
+   * this method creates a description of the Problem and returns it as {@link RuntimeException} e.g. using Zalando
+   * Problem library.
+   * 
+   * @param pRequestURI URI of the request. The parameter must not be null.
+   * @param pException Exception that occurred during internal processing. The parameter must not be null.
+   * @param pContext Description of the context in which the problem occurred. The context may be used for tracing e.g.
+   * The parameter must not be null.
+   * @return {@link RuntimeException} Runtime exception representing the occurred problem. The method must not return
+   * null.
+   */
+  protected abstract RuntimeException processInternalServerError( URI pRequestURI, Exception pException,
+      String pContext );
+
+  /**
+   * Method returns the REST client configuration that belongs to the passed service. From where the configuration is
+   * read is up to the implementation ;-)
+   * 
+   * @param pServiceClass Class representing the service whose configuration should be returned.
+   * @return {@link RESTClientConfiguration} Configuration object for the passed service. The method must not return
+   * null.
+   */
+  protected abstract RESTClientConfiguration getConfiguration( Class<?> pServiceClass );
 
   @Override
   public final void executeNoResultRequest( RESTRequest pRequest, int pSuccessfulStatusCode ) {
