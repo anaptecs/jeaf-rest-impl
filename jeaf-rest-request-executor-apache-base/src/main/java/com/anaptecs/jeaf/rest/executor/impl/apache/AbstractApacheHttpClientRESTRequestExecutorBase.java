@@ -210,6 +210,98 @@ public abstract class AbstractApacheHttpClientRESTRequestExecutorBase implements
     return this.executeRequest(lServiceClass, lHttpClientRequest, lHttpContext, pSuccessfulStatusCode, lResponseType);
   }
 
+  /**
+   * Method executes the passed HTTP request using the configured HTTP client and circuit breaker.
+   * 
+   * @param pRequest Request that should b executed. The parameter must not be null.
+   * @param pSuccessfulStatusCode Status code that defines that the call was successful.
+   * @param pResponseType Object describing the response type of the call. The parameter may be null in case that
+   * operation does not return any content e.g. void operations.
+   * @return T Object of defined response type. If the called REST resource returns no content as response then null
+   * will be returned.
+   */
+  private <T> T executeRequest( Class<?> pServiceClass, ClassicHttpRequest pRequest, HttpContext pHttpContext,
+      int pSuccessfulStatusCode, JavaType pResponseType ) {
+    // Try to execute call to REST resource
+    CloseableHttpResponse lResponse = null;
+    URI lRequestURI = null;
+  
+    // Resolve http client, circuit breaker and configuration for service that will be called.
+    CloseableHttpClient lHttpClient = this.getHttpClient(pServiceClass);
+    CircuitBreaker lCircuitBreaker = this.getCircuitBreaker(pServiceClass);
+    RESTClientConfiguration lConfiguration = this.getConfiguration(pServiceClass);
+  
+    try {
+      // For reasons of proper error handling we need to find out the request URI.
+      lRequestURI = pRequest.getUri();
+      // Trace request. Actually request logging is only done if log level is set to DEBUG.
+      this.traceRequest(pRequest, lConfiguration);
+      // Decorate call to proxy with circuit breaker.
+      Callable<CloseableHttpResponse> lCallable =
+          CircuitBreaker.decorateCallable(lCircuitBreaker, new Callable<CloseableHttpResponse>() {
+            @Override
+            public CloseableHttpResponse call( ) throws IOException {
+              return lHttpClient.execute(pRequest, pHttpContext);
+            }
+          });
+      // Execute request to REST resource
+      lResponse = lCircuitBreaker.executeCallable(lCallable);
+      // If call was successful then we have to convert response into real objects.
+      int lStatusCode = lResponse.getCode();
+      if (lStatusCode == pSuccessfulStatusCode) {
+        T lResultObject;
+        HttpEntity lEntity = lResponse.getEntity();
+        if (pResponseType != null && lEntity.getContentLength() > 0) {
+          // Check if response logging is active.
+          if (this.isResponseTracingEnabled(lConfiguration)) {
+            String lResponseBody = this.getContent(lEntity.getContent());
+            this.traceResponse(lResponse, lRequestURI, lResponseBody, lConfiguration);
+            lResultObject = this.getObjectMapper().readValue(lResponseBody, pResponseType);
+          }
+          else {
+            lResultObject = this.getObjectMapper().readValue(lEntity.getContent(), pResponseType);
+          }
+        }
+        else {
+          lResultObject = null;
+        }
+        return lResultObject;
+      }
+      // Error when trying to execute REST call.
+      else {
+        // If server provided problem JSON then we will return this information.
+        throw this.processErrorResponse(lRequestURI, lResponse);
+      }
+    }
+    //
+    // In all the cases below we will use status code 500 INTERNAL_SERVER error as it is not the clients fault that the
+    // request could not be processed
+    //
+    // Thanks to circuit breaker interface definition of Resilience4J we have to handle RuntimeExceptions
+    catch (RuntimeException e) {
+      throw e;
+    }
+    // IOException can result from communication or serialization problems. Thanks to circuit breaker interface
+    // definition of Resilience4J we also have to catch java.lang.Exception ;-(
+    catch (Exception e) {
+      throw this.processInternalServerError(lRequestURI, e, "Exception occurred when try to call REST Service "
+          + pRequest.toString());
+    }
+    // No matter what happened we have at least close the http response if possible.
+    finally {
+      if (lResponse != null) {
+        try {
+          lResponse.close();
+        }
+        catch (IOException e) {
+          this.traceException(
+              "Unable to close http client response from REST Service " + this.getConfiguration(pServiceClass)
+                  .getExternalServiceURL(), e);
+        }
+      }
+    }
+  }
+
   private ClassicHttpRequest createHttpClientRequest( RESTRequest pRequest, RESTClientConfiguration pConfiguration ) {
     URI lRequestURI = null;
     try {
@@ -406,98 +498,6 @@ public abstract class AbstractApacheHttpClientRESTRequestExecutorBase implements
         throw new IllegalArgumentException("Unexpected content type '" + pContentType.name() + "'.");
     }
     return lContentType;
-  }
-
-  /**
-   * Method executes the passed HTTP request using the configured HTTP client and circuit breaker.
-   * 
-   * @param pRequest Request that should b executed. The parameter must not be null.
-   * @param pSuccessfulStatusCode Status code that defines that the call was successful.
-   * @param pResponseType Object describing the response type of the call. The parameter may be null in case that
-   * operation does not return any content e.g. void operations.
-   * @return T Object of defined response type. If the called REST resource returns no content as response then null
-   * will be returned.
-   */
-  private <T> T executeRequest( Class<?> pServiceClass, ClassicHttpRequest pRequest, HttpContext pHttpContext,
-      int pSuccessfulStatusCode, JavaType pResponseType ) {
-    // Try to execute call to REST resource
-    CloseableHttpResponse lResponse = null;
-    URI lRequestURI = null;
-
-    // Resolve http client, circuit breaker and configuration for service that will be called.
-    CloseableHttpClient lHttpClient = this.getHttpClient(pServiceClass);
-    CircuitBreaker lCircuitBreaker = this.getCircuitBreaker(pServiceClass);
-    RESTClientConfiguration lConfiguration = this.getConfiguration(pServiceClass);
-
-    try {
-      // For reasons of proper error handling we need to find out the request URI.
-      lRequestURI = pRequest.getUri();
-      // Trace request. Actually request logging is only done if log level is set to DEBUG.
-      this.traceRequest(pRequest, lConfiguration);
-      // Decorate call to proxy with circuit breaker.
-      Callable<CloseableHttpResponse> lCallable =
-          CircuitBreaker.decorateCallable(lCircuitBreaker, new Callable<CloseableHttpResponse>() {
-            @Override
-            public CloseableHttpResponse call( ) throws IOException {
-              return lHttpClient.execute(pRequest, pHttpContext);
-            }
-          });
-      // Execute request to REST resource
-      lResponse = lCircuitBreaker.executeCallable(lCallable);
-      // If call was successful then we have to convert response into real objects.
-      int lStatusCode = lResponse.getCode();
-      if (lStatusCode == pSuccessfulStatusCode) {
-        T lResultObject;
-        HttpEntity lEntity = lResponse.getEntity();
-        if (pResponseType != null && lEntity.getContentLength() > 0) {
-          // Check if response logging is active.
-          if (this.isResponseTracingEnabled(lConfiguration)) {
-            String lResponseBody = this.getContent(lEntity.getContent());
-            this.traceResponse(lResponse, lRequestURI, lResponseBody, lConfiguration);
-            lResultObject = this.getObjectMapper().readValue(lResponseBody, pResponseType);
-          }
-          else {
-            lResultObject = this.getObjectMapper().readValue(lEntity.getContent(), pResponseType);
-          }
-        }
-        else {
-          lResultObject = null;
-        }
-        return lResultObject;
-      }
-      // Error when trying to execute REST call.
-      else {
-        // If server provided problem JSON then we will return this information.
-        throw this.processErrorResponse(lRequestURI, lResponse);
-      }
-    }
-    //
-    // In all the cases below we will use status code 500 INTERNAL_SERVER error as it is not the clients fault that the
-    // request could not be processed
-    //
-    // Thanks to circuit breaker interface definition of Resilience4J we have to handle RuntimeExceptions
-    catch (RuntimeException e) {
-      throw e;
-    }
-    // IOException can result from communication or serialization problems. Thanks to circuit breaker interface
-    // definition of Resilience4J we also have to catch java.lang.Exception ;-(
-    catch (Exception e) {
-      throw this.processInternalServerError(lRequestURI, e, "Exception occurred when try to call REST Service "
-          + pRequest.toString());
-    }
-    // No matter what happened we have at least close the http response if possible.
-    finally {
-      if (lResponse != null) {
-        try {
-          lResponse.close();
-        }
-        catch (IOException e) {
-          this.traceException(
-              "Unable to close http client response from REST Service " + this.getConfiguration(pServiceClass)
-                  .getExternalServiceURL(), e);
-        }
-      }
-    }
   }
 
   private void traceRequest( ClassicHttpRequest pRequest, RESTClientConfiguration pConfiguration )
