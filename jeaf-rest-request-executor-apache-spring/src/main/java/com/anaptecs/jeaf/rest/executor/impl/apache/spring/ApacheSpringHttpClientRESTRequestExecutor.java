@@ -120,7 +120,6 @@ public class ApacheSpringHttpClientRESTRequestExecutor extends AbstractApacheHtt
         lProblem = this.getObjectMapper().readValue(lResponseBody, ThrowableProblem.class);
       }
       catch (IOException e) {
-        lProblem = null;
         throw this.processInternalServerError(pRequestURI, e, "Unable to process problem JSON");
       }
     }

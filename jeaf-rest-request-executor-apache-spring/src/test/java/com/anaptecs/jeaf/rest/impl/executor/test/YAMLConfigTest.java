@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test;
 
 import com.anaptecs.jeaf.rest.executor.impl.apache.YAMLBasedRESTClientConfiguration;
 
-public class YAMLConfigTest {
+class YAMLConfigTest {
 
   @Test
   void testYAMLConfiguration( ) {

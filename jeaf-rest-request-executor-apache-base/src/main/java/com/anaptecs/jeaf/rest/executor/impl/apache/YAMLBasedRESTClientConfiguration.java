@@ -207,7 +207,7 @@ public class YAMLBasedRESTClientConfiguration implements RESTClientConfiguration
   public List<String> getSensitiveHeaderNames( ) {
     if (sensitiveHeaderNames == null) {
       if (sensitiveHeaders != null) {
-        sensitiveHeaderNames = new ArrayList<String>(sensitiveHeaders.size());
+        sensitiveHeaderNames = new ArrayList<>(sensitiveHeaders.size());
         for (String lNext : sensitiveHeaders) {
           sensitiveHeaderNames.add(lNext.toLowerCase());
         }
