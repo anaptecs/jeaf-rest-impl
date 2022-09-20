@@ -37,6 +37,7 @@
 			<version>${apache.httpclient5.version}</version>
 		</dependency>
 
+		<!-- https://mvnrepository.com/artifact/io.github.resilience4j/resilience4j-circuitbreaker -->
 		<dependency>
 			<groupId>io.github.resilience4j</groupId>
 			<artifactId>resilience4j-circuitbreaker</artifactId>
