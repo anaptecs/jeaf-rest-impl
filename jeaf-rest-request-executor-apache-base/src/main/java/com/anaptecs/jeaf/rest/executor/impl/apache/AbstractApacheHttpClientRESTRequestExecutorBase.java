@@ -400,16 +400,12 @@ public abstract class AbstractApacheHttpClientRESTRequestExecutorBase implements
     // In all the cases below we will use status code 500 INTERNAL_SERVER error as it is not the clients fault that the
     // request could not be processed
     //
-    // IOException can result from communication or serialization problems.
-    catch (IOException e) {
-      throw this.processInternalServerError(lRequestURI, e, "Exception occurred when try to call REST Service "
-          + pRequest.toString());
-    }
     // Thanks to circuit breaker interface definition of Resilience4J we have to handle RuntimeExceptions
     catch (RuntimeException e) {
       throw e;
     }
-    // Thanks to circuit breaker interface definition of Resilience4J we also have to catch java.lang.Exception ;-(
+    // IOException can result from communication or serialization problems. Thanks to circuit breaker interface
+    // definition of Resilience4J we also have to catch java.lang.Exception ;-(
     catch (Exception e) {
       throw this.processInternalServerError(lRequestURI, e, "Exception occurred when try to call REST Service "
           + pRequest.toString());
