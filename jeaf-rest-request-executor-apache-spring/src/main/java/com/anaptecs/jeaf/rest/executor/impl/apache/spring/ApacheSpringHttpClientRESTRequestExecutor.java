@@ -32,6 +32,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 /**
  * Class implements a {@link RESTRequestExecutor} that is based on Apache HTTP Client and Resilience4J circuit breaker.
+ * Configurations are read from YAML files via the classpath. The configuration file must have the lower case simple
+ * name of the service.
+ * 
+ * Zalando Problem library is used for JSON Problem handling.
  * 
  * @author JEAF Development Team
  */
