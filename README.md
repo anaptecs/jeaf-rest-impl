@@ -1,29 +1,15 @@
-# README #
+# JEAF REST Impl README #
 
-This README would normally document whatever steps are necessary to get your application up and running.
+JEAF REST Impl different types of implements for the API that is defined by JEAF REST API projects.
 
-### What is this repository for? ###
+## Links ##
+For further information please refer to:
 
-* Quick summary
-* Version
-* [Learn Markdown](https://bitbucket.org/tutorials/markdowndemo)
+* [JEAF REST](https://anaptecs.atlassian.net/l/c/fBmaPk18)
+* [Maven Repository](https://search.maven.org/artifact/com.anaptecs.jeaf.rest/jeaf-rest-impl-project)
+* [Javadoc](https://javadoc.io/doc/com.anaptecs.jeaf.rest/jeaf-rest-impl)
 
-### How do I get set up? ###
+## How do I get set up? ##
 
-* Summary of set up
-* Configuration
-* Dependencies
-* Database configuration
-* How to run tests
-* Deployment instructions
-
-### Contribution guidelines ###
-
-* Writing tests
-* Code review
-* Other guidelines
-
-### Who do I talk to? ###
-
-* Repo owner or admin
-* Other community or team contact
+* Create a clone of this repository on your local machine.
+* Execute Maven on the top level project `maven clean install`
