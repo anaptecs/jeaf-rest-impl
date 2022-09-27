@@ -16,6 +16,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
 import java.util.concurrent.Callable;
 
 import org.apache.hc.client5.http.config.RequestConfig;
@@ -225,12 +226,12 @@ public abstract class AbstractApacheHttpClientRESTRequestExecutorBase implements
     // Try to execute call to REST resource
     CloseableHttpResponse lResponse = null;
     URI lRequestURI = null;
-  
+
     // Resolve http client, circuit breaker and configuration for service that will be called.
     CloseableHttpClient lHttpClient = this.getHttpClient(pServiceClass);
     CircuitBreaker lCircuitBreaker = this.getCircuitBreaker(pServiceClass);
     RESTClientConfiguration lConfiguration = this.getConfiguration(pServiceClass);
-  
+
     try {
       // For reasons of proper error handling we need to find out the request URI.
       lRequestURI = pRequest.getUri();
@@ -251,7 +252,9 @@ public abstract class AbstractApacheHttpClientRESTRequestExecutorBase implements
       if (lStatusCode == pSuccessfulStatusCode) {
         T lResultObject;
         HttpEntity lEntity = lResponse.getEntity();
-        if (pResponseType != null && lEntity.getContentLength() > 0) {
+
+        //
+        if (pResponseType != null && lEntity.getContentLength() != 0) {
           // Check if response logging is active.
           if (this.isResponseTracingEnabled(lConfiguration)) {
             String lResponseBody = this.getContent(lEntity.getContent());
@@ -316,8 +319,11 @@ public abstract class AbstractApacheHttpClientRESTRequestExecutorBase implements
       lRequestURI = lRequestBuilder.getUri();
 
       // Set query params
-      for (Entry<String, String> lNextQueryParam : pRequest.getQueryParams().entrySet()) {
-        lRequestBuilder.addParameter(lNextQueryParam.getKey(), lNextQueryParam.getValue());
+      for (Entry<String, Set<String>> lNextQueryParam : pRequest.getQueryParams().entrySet()) {
+        // As the might be multiple values for one query param we have to lopp over all passed values.
+        for (String lNextValue : lNextQueryParam.getValue()) {
+          lRequestBuilder.addParameter(lNextQueryParam.getKey(), lNextValue);
+        }
       }
 
       // Set HTTP header(s)
@@ -558,6 +564,7 @@ public abstract class AbstractApacheHttpClientRESTRequestExecutorBase implements
           lBuilder.append(lNextHeader.getValue());
           lBuilder.append("' ");
         }
+        // TODO: Write sensitive headers to log but without value e.g. '***'
       }
       lBuilder.append(System.lineSeparator());
       // Add body if request has one.
