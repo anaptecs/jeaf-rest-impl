@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>com.anaptecs.jeaf.rest</groupId>
 		<artifactId>jeaf-rest-impl-project</artifactId>
-		<version>1.6.0-SNAPSHOT</version>
+		<version>1.6.1-RC01-SNAPSHOT</version>
 	</parent>
 
 	<name>JEAF REST Request Executor Apache Spring</name>
@@ -16,7 +16,7 @@
 		<dependency>
 			<groupId>com.anaptecs.jeaf.rest</groupId>
 			<artifactId>jeaf-rest-request-executor-apache-base</artifactId>
-			<version>1.6.0-SNAPSHOT</version>
+			<version>1.6.1-RC01-SNAPSHOT</version>
 		</dependency>
 
 		<dependency>
