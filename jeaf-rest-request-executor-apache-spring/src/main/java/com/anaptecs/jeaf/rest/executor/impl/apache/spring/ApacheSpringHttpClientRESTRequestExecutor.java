@@ -26,8 +26,8 @@ import org.zalando.problem.spring.web.advice.HttpStatusAdapter;
 
 import com.anaptecs.jeaf.rest.executor.api.RESTRequestExecutor;
 import com.anaptecs.jeaf.rest.executor.impl.apache.AbstractApacheHttpClientRESTRequestExecutorBase;
-import com.anaptecs.jeaf.rest.executor.impl.apache.RESTClientConfiguration;
-import com.anaptecs.jeaf.rest.executor.impl.apache.YAMLBasedRESTClientConfiguration;
+import com.anaptecs.jeaf.rest.executor.impl.config.RESTClientConfiguration;
+import com.anaptecs.jeaf.rest.executor.impl.config.yaml.YAMLBasedRESTClientConfigurationLoader;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 /**
@@ -95,7 +95,7 @@ public class ApacheSpringHttpClientRESTRequestExecutor extends AbstractApacheHtt
   private RESTClientConfiguration loadConfiguration( Class<?> pServiceClass ) {
     // We expect a YAML file with same name as service to be located in the class path.
     String lResourceFileName = pServiceClass.getSimpleName().toLowerCase() + ".yml";
-    return YAMLBasedRESTClientConfiguration.loadConfiguration(lResourceFileName);
+    return YAMLBasedRESTClientConfigurationLoader.loadConfiguration(lResourceFileName);
   }
 
   @Override

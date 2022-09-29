@@ -51,6 +51,7 @@ import org.apache.hc.core5.util.Timeout;
 import com.anaptecs.jeaf.rest.executor.api.HttpMethod;
 import com.anaptecs.jeaf.rest.executor.api.RESTRequest;
 import com.anaptecs.jeaf.rest.executor.api.RESTRequestExecutor;
+import com.anaptecs.jeaf.rest.executor.impl.config.RESTClientConfiguration;
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
 

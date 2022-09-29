@@ -3,24 +3,21 @@
  * 
  * Copyright 2004 - 2019. All rights reserved.
  */
-package com.anaptecs.jeaf.rest.executor.impl.apache;
+package com.anaptecs.jeaf.rest.executor.impl.config.impl;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-import org.yaml.snakeyaml.Yaml;
-import org.yaml.snakeyaml.constructor.Constructor;
-import org.yaml.snakeyaml.introspector.BeanAccess;
+import com.anaptecs.jeaf.rest.executor.impl.config.RESTClientConfiguration;
 
 /**
  * Class provided a {@link RESTClientConfiguration} that reads all required configuration parameters from a YAML file.
  * 
  * @author JEAF Development Team
  */
-public class YAMLBasedRESTClientConfiguration implements RESTClientConfiguration {
+public class RESTClientConfigurationImpl implements RESTClientConfiguration {
   /**
    * URL of the REST service that is proxied by this service implementation.
    */
@@ -39,133 +36,37 @@ public class YAMLBasedRESTClientConfiguration implements RESTClientConfiguration
   /**
    * List of http headers that is considered to be security sensitive.
    */
-  private List<String> sensitiveHeaders;
+  private List<String> sensitiveHeaders = Arrays.asList("Authorization");
 
   private List<String> sensitiveHeaderNames;
 
   /**
-   * Maximum size of the connection pool.
+   * Attribute defines if http requests should be traced.
    */
-  private int maxPoolSize;
+  private boolean traceRequests = true;
 
   /**
-   * Maximum amount of idle connections in the connection pool.
+   * Attribute defines if http responses should be traced.
    */
-  private int maxIdleConnections;
+  private boolean traceResponses = false;
 
   /**
-   * Keep alive duration for connection to REST service (in milliseconds).
+   * Configuration for Apache HTTP Client
    */
-  private int keepAliveDuration;
+  private ApacheHttpClientConfiguration httpClientConfiguration = new ApacheHttpClientConfiguration();
 
   /**
-   * Parameter configures the time period in milliseconds after which a connection is validated before it is taken from
-   * the pool again.
+   * Configuration for Resilience4J circuit breaker.
    */
-  private int validateAfterInactivityDuration;
+  private Resilience4JConfiguration circuitBreakerConfiguration = new Resilience4JConfiguration();
 
   /**
-   * Maximum amount of retries before a call to the REST service is considered to be failed.
+   * Method validates this configuration object if all required configuration parameters as set.
    */
-  private int maxRetries;
-
-  /**
-   * Interval in milliseconds after which the REST service is called again in case that retries are configured.
-   */
-  private int retryInterval;
-
-  /**
-   * Response timeout in milliseconds for calls to REST service. Please be aware that this is a very sensitive parameter
-   * and needs to be fine-tuned for your purposes.
-   */
-  private int responseTimeout;
-
-  /**
-   * Timeout in milliseconds to establish connections to the REST service. As connections are pooled this parameter
-   * should not have a too strong influence on the overall behavior. However please ensure that it fits to your
-   * environment.
-   */
-  private int connectTimeout;
-
-  /**
-   * Timeout in milliseconds when requesting a connection from the pool of http connections. This parameter especially
-   * becomes important in cases where a connection pool is configured too small or in cases of unexpected high load.
-   */
-  private int connectionRequestTimeout;
-
-  /**
-   * Attribute defines if http request should be traced.
-   */
-  private boolean traceRequests;
-
-  /**
-   * Attribute defies if http responses should be traced.
-   */
-  private boolean traceResponses;
-
-  /**
-   * Failure rate threshold (percent of requests) defines which amount of failed request must be exceeded due to
-   * technical problems that the circuit breaker opens and no further request will be sent to the REST service.
-   * 
-   * Value must between 0 and 100.
-   */
-  private int failureRateThreshold;
-
-  /**
-   * Duration in milliseconds that the circuit breaker stays open until request will be sent to the REST service again.
-   * 
-   * The value must be zero or greater.
-   */
-  private int durationInOpenState;
-
-  /**
-   * Configures the duration in milliseconds above which calls are considered as slow and increase the slow calls
-   * percentage.
-   * 
-   * The value must be zero or greater.
-   */
-  private int slowRequestDuration;
-
-  /**
-   * Configures the slow request threshold in percentage. The circuit breaker considers a call as slow when the call
-   * duration is greater than <code>slowCallDuration</code>. When the percentage of slow calls is equal to or greater
-   * than the threshold, the circuit breaker transitions to open and starts short-circuiting calls.
-   * 
-   * Value must between 0 and 100.
-   */
-  private int slowRequestRateThreshold;
-
-  /**
-   * Configures the number of permitted calls when the circuit breaker is half open.
-   * 
-   * The value must be zero or greater.
-   */
-  private int permittedCallsInHalfOpenState;
-
-  /**
-   * Configures the size of the sliding window in seconds which is used to record the outcome of calls when the circuit
-   * breaker is closed.
-   * 
-   * The value must be greater than 0.
-   */
-  private int slidingWindowSizeSeconds;
-
-  public static YAMLBasedRESTClientConfiguration loadConfiguration( String pResource ) {
-    Yaml lYAML = new Yaml(new Constructor(YAMLBasedRESTClientConfiguration.class));
-    lYAML.setBeanAccess(BeanAccess.FIELD);
-    try (InputStream lInputStream = YAMLBasedRESTClientConfiguration.class.getClassLoader().getResourceAsStream(
-        pResource)) {
-      if (lInputStream != null) {
-        return (YAMLBasedRESTClientConfiguration) lYAML.load(lInputStream);
-      }
-      else {
-        throw new IllegalArgumentException("Unable to load YAML configuration. '" + pResource
-            + "' cloud not be found in the applications classpath.");
-      }
-    }
-    catch (IOException e) {
-      throw new IllegalArgumentException("Unable to load YAML configuration '" + pResource
-          + "'. " + e.getMessage());
+  public void validate( ) {
+    if (externalServiceURL == null) {
+      throw new IllegalArgumentException(
+          "Mandatory configuration parameter 'externalServiceURL' is not set. Please fix your configuration and try again.");
     }
   }
 
@@ -222,101 +123,6 @@ public class YAMLBasedRESTClientConfiguration implements RESTClientConfiguration
   }
 
   /**
-   * Method returns the maximum size of the connection pool.
-   * 
-   * @return int Maximum pool size.
-   */
-  @Override
-  public int getMaxPoolSize( ) {
-    return maxPoolSize;
-  }
-
-  /**
-   * Method returns the maximum amount of idle connections in the connection pool.
-   * 
-   * @return int Maximum amount of idle connections.
-   */
-  @Override
-  public int getMaxIdleConnections( ) {
-    return maxIdleConnections;
-  }
-
-  /**
-   * Method returns the keep alive duration for connection to REST service (in milliseconds).
-   * 
-   * @return int Connection keep alive duration.
-   */
-  @Override
-  public int getKeepAliveDuration( ) {
-    return keepAliveDuration;
-  }
-
-  /**
-   * Method returns the time period in milliseconds after which a connection is validated before it is taken from the
-   * pool again.
-   * 
-   * @return int Time period in milliseconds after which a connection is validated before it is taken from the pool
-   * again.
-   */
-  @Override
-  public int getValidateAfterInactivityDuration( ) {
-    return validateAfterInactivityDuration;
-  }
-
-  /**
-   * Method returns the maximum amount of retries before a call to the REST service is considered to be failed.
-   * 
-   * @return int Maximum amount of retries before a call to the REST service is considered to be failed.
-   */
-  @Override
-  public int getMaxRetries( ) {
-    return maxRetries;
-  }
-
-  /**
-   * Method returns the interval in milliseconds after which the REST service is called again in case that retries are
-   * configured.
-   * 
-   * @return int Interval in milliseconds after which the REST service is called again in case that retries are
-   * configured.
-   */
-  @Override
-  public int getRetryInterval( ) {
-    return retryInterval;
-  }
-
-  /**
-   * Method returns the response timeout in milliseconds for calls to REST service.
-   * 
-   * @return int Response timeout in milliseconds for calls to REST service.
-   */
-  @Override
-  public int getResponseTimeout( ) {
-    return responseTimeout;
-  }
-
-  /**
-   * Method returns the timeout in milliseconds to establish connections to the REST service. As connections are pooled
-   * this parameter should not have a too strong influence on the overall behavior.
-   * 
-   * @return int Timeout in milliseconds to establish connections to the REST service.
-   */
-  @Override
-  public int getConnectTimeout( ) {
-    return connectTimeout;
-  }
-
-  /**
-   * Method returns the connection request timeout when a http connection is taken from the pool.
-   * 
-   * @return int Connection request timeout in milliseconds.
-   */
-  @Override
-  public int getConnectionRequestTimeout( ) {
-    return connectionRequestTimeout;
-  }
-
-  /**
    * Method returns if requests should be traced or not
    * 
    * @return boolean Method returns <code>true</code> if request should be traced and <code>false</code> otherwise.
@@ -337,6 +143,101 @@ public class YAMLBasedRESTClientConfiguration implements RESTClientConfiguration
   }
 
   /**
+   * Method returns the maximum size of the connection pool.
+   * 
+   * @return int Maximum pool size.
+   */
+  @Override
+  public int getMaxPoolSize( ) {
+    return httpClientConfiguration.getMaxPoolSize();
+  }
+
+  /**
+   * Method returns the maximum amount of idle connections in the connection pool.
+   * 
+   * @return int Maximum amount of idle connections.
+   */
+  @Override
+  public int getMaxIdleConnections( ) {
+    return httpClientConfiguration.getMaxIdleConnections();
+  }
+
+  /**
+   * Method returns the keep alive duration for connection to REST service (in milliseconds).
+   * 
+   * @return int Connection keep alive duration.
+   */
+  @Override
+  public int getKeepAliveDuration( ) {
+    return httpClientConfiguration.getKeepAliveDuration();
+  }
+
+  /**
+   * Method returns the time period in milliseconds after which a connection is validated before it is taken from the
+   * pool again.
+   * 
+   * @return int Time period in milliseconds after which a connection is validated before it is taken from the pool
+   * again.
+   */
+  @Override
+  public int getValidateAfterInactivityDuration( ) {
+    return httpClientConfiguration.getValidateAfterInactivityDuration();
+  }
+
+  /**
+   * Method returns the maximum amount of retries before a call to the REST service is considered to be failed.
+   * 
+   * @return int Maximum amount of retries before a call to the REST service is considered to be failed.
+   */
+  @Override
+  public int getMaxRetries( ) {
+    return httpClientConfiguration.getMaxRetries();
+  }
+
+  /**
+   * Method returns the interval in milliseconds after which the REST service is called again in case that retries are
+   * configured.
+   * 
+   * @return int Interval in milliseconds after which the REST service is called again in case that retries are
+   * configured.
+   */
+  @Override
+  public int getRetryInterval( ) {
+    return httpClientConfiguration.getRetryInterval();
+  }
+
+  /**
+   * Method returns the response timeout in milliseconds for calls to REST service.
+   * 
+   * @return int Response timeout in milliseconds for calls to REST service.
+   */
+  @Override
+  public int getResponseTimeout( ) {
+    return httpClientConfiguration.getResponseTimeout();
+  }
+
+  /**
+   * Method returns the timeout in milliseconds to establish connections to the REST service. As connections are pooled
+   * this parameter should not have a too strong influence on the overall behavior.
+   * 
+   * @return int Timeout in milliseconds to establish connections to the REST service.
+   */
+  @Override
+  public int getConnectTimeout( ) {
+    return httpClientConfiguration.getConnectTimeout();
+  }
+
+  /**
+   * Method returns the connection request timeout when a http connection is taken from the pool.
+   * 
+   * @return int Connection request timeout in milliseconds.
+   */
+  @Override
+  public int getConnectionRequestTimeout( ) {
+    return httpClientConfiguration.getConnectionRequestTimeout();
+  }
+
+  /**
    * Method returns the failure rate threshold (percent of requests) defines which amount of failed request must be
    * exceeded due to technical problems that the circuit breaker opens and no further request will be sent to the REST
    * service.
@@ -345,7 +246,7 @@ public class YAMLBasedRESTClientConfiguration implements RESTClientConfiguration
    */
   @Override
   public int getFailureRateThreshold( ) {
-    return failureRateThreshold;
+    return circuitBreakerConfiguration.getFailureRateThreshold();
   }
 
   /**
@@ -357,7 +258,7 @@ public class YAMLBasedRESTClientConfiguration implements RESTClientConfiguration
    */
   @Override
   public int getDurationInOpenState( ) {
-    return durationInOpenState;
+    return circuitBreakerConfiguration.getDurationInOpenState();
   }
 
   /**
@@ -368,7 +269,7 @@ public class YAMLBasedRESTClientConfiguration implements RESTClientConfiguration
    */
   @Override
   public int getSlowRequestDuration( ) {
-    return slowRequestDuration;
+    return circuitBreakerConfiguration.getSlowRequestDuration();
   }
 
   /**
@@ -382,7 +283,7 @@ public class YAMLBasedRESTClientConfiguration implements RESTClientConfiguration
    */
   @Override
   public int getSlowRequestRateThreshold( ) {
-    return slowRequestRateThreshold;
+    return circuitBreakerConfiguration.getSlowRequestRateThreshold();
   }
 
   /**
@@ -392,7 +293,7 @@ public class YAMLBasedRESTClientConfiguration implements RESTClientConfiguration
    */
   @Override
   public int getPermittedCallsInHalfOpenState( ) {
-    return permittedCallsInHalfOpenState;
+    return circuitBreakerConfiguration.getPermittedCallsInHalfOpenState();
   }
 
   /**
@@ -405,6 +306,6 @@ public class YAMLBasedRESTClientConfiguration implements RESTClientConfiguration
    */
   @Override
   public int getSlidingWindowSizeSeconds( ) {
-    return slidingWindowSizeSeconds;
+    return circuitBreakerConfiguration.getSlidingWindowSizeSeconds();
   }
 }

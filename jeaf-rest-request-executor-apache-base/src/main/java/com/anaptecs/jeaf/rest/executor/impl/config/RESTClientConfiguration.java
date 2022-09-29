@@ -3,7 +3,7 @@
  * 
  * Copyright 2004 - 2019. All rights reserved.
  */
-package com.anaptecs.jeaf.rest.executor.impl.apache;
+package com.anaptecs.jeaf.rest.executor.impl.config;
 
 import java.util.List;
 
