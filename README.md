@@ -1,3 +1,7 @@
+![Latest Version](https://maven-badges.herokuapp.com/maven-central/com.anaptecs.jeaf.rest/jeaf-rest-impl-project/badge.svg)
+
+
+
 # JEAF REST Impl README #
 
 JEAF REST Impl conmtains different types of implementations for the API that is defined by JEAF REST API projects.
