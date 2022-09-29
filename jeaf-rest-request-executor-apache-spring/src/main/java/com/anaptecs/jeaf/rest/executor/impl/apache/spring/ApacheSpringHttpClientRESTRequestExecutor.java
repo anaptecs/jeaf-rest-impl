@@ -94,7 +94,7 @@ public class ApacheSpringHttpClientRESTRequestExecutor extends AbstractApacheHtt
 
   private RESTClientConfiguration loadConfiguration( Class<?> pServiceClass ) {
     // We expect a YAML file with same name as service to be located in the class path.
-    String lResourceFileName = pServiceClass.getSimpleName().toLowerCase() + ".yml";
+    String lResourceFileName = pServiceClass.getSimpleName().toLowerCase() + ".yaml";
     return YAMLBasedRESTClientConfigurationLoader.loadConfiguration(lResourceFileName);
   }
 
