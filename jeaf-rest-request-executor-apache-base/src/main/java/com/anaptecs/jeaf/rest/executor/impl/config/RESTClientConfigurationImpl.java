@@ -3,14 +3,12 @@
  * 
  * Copyright 2004 - 2019. All rights reserved.
  */
-package com.anaptecs.jeaf.rest.executor.impl.config.impl;
+package com.anaptecs.jeaf.rest.executor.impl.config;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-
-import com.anaptecs.jeaf.rest.executor.impl.config.RESTClientConfiguration;
 
 /**
  * Class provided a {@link RESTClientConfiguration} that reads all required configuration parameters from a YAML file.

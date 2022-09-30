@@ -42,5 +42,12 @@
 			<artifactId>problem-spring-web</artifactId>
 			<version>${zalando.problem.version}</version>
 		</dependency>
+
+		<!-- https://mvnrepository.com/artifact/org.yaml/snakeyaml -->
+		<dependency>
+			<groupId>org.yaml</groupId>
+			<artifactId>snakeyaml</artifactId>
+			<version>${snakeyaml.version}</version>
+		</dependency>
 	</dependencies>
 </project>

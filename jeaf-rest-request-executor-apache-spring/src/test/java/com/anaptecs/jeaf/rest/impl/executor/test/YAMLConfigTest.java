@@ -10,8 +10,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.jupiter.api.Test;
 
+import com.anaptecs.jeaf.rest.executor.impl.apache.spring.YAMLBasedRESTClientConfigurationLoader;
 import com.anaptecs.jeaf.rest.executor.impl.config.RESTClientConfiguration;
-import com.anaptecs.jeaf.rest.executor.impl.config.yaml.YAMLBasedRESTClientConfigurationLoader;
 
 class YAMLConfigTest {
 

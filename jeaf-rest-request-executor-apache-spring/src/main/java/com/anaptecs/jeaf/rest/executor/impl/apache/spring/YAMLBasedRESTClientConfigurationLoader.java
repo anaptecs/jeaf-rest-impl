@@ -3,7 +3,7 @@
  * 
  * Copyright 2004 - 2019. All rights reserved.
  */
-package com.anaptecs.jeaf.rest.executor.impl.config.yaml;
+package com.anaptecs.jeaf.rest.executor.impl.apache.spring;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -13,7 +13,7 @@ import org.yaml.snakeyaml.constructor.Constructor;
 import org.yaml.snakeyaml.introspector.BeanAccess;
 
 import com.anaptecs.jeaf.rest.executor.impl.config.RESTClientConfiguration;
-import com.anaptecs.jeaf.rest.executor.impl.config.impl.RESTClientConfigurationImpl;
+import com.anaptecs.jeaf.rest.executor.impl.config.RESTClientConfigurationImpl;
 
 /**
  * Class provided a {@link RESTClientConfiguration} that reads all required configuration parameters from a YAML file.

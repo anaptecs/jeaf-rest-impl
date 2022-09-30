@@ -7,10 +7,10 @@ package com.anaptecs.jeaf.rest.executor.impl.apache.jeaf;
 
 import java.util.List;
 
+import com.anaptecs.jeaf.rest.executor.impl.config.ApacheHttpClientConfiguration;
+import com.anaptecs.jeaf.rest.executor.impl.config.CircuitBreakerConfiguration;
 import com.anaptecs.jeaf.rest.executor.impl.config.RESTClientConfiguration;
-import com.anaptecs.jeaf.rest.executor.impl.config.impl.ApacheHttpClientConfiguration;
-import com.anaptecs.jeaf.rest.executor.impl.config.impl.RESTClientConfigurationImpl;
-import com.anaptecs.jeaf.rest.executor.impl.config.impl.CircuitBreakerConfiguration;
+import com.anaptecs.jeaf.rest.executor.impl.config.RESTClientConfigurationImpl;
 import com.anaptecs.jeaf.xfun.api.XFun;
 import com.anaptecs.jeaf.xfun.api.config.Configuration;
 

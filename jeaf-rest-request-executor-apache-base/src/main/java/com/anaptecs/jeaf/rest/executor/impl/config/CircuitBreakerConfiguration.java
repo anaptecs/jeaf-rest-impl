@@ -3,9 +3,7 @@
  * 
  * Copyright 2004 - 2019. All rights reserved.
  */
-package com.anaptecs.jeaf.rest.executor.impl.config.impl;
-
-import com.anaptecs.jeaf.rest.executor.impl.config.RESTClientConfiguration;
+package com.anaptecs.jeaf.rest.executor.impl.config;
 
 /**
  * Class provided a {@link RESTClientConfiguration} that reads all required configuration parameters from a YAML file.
