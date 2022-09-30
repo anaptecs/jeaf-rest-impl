@@ -20,6 +20,7 @@ import com.anaptecs.jeaf.json.problem.Problem;
 import com.anaptecs.jeaf.json.problem.Problem.Builder;
 import com.anaptecs.jeaf.json.problem.RESTProblemException;
 import com.anaptecs.jeaf.rest.executor.api.RESTRequestExecutor;
+import com.anaptecs.jeaf.rest.executor.api.jeaf.RESTRequestExecutorServiceProvider;
 import com.anaptecs.jeaf.rest.executor.impl.apache.AbstractApacheHttpClientRESTRequestExecutorBase;
 import com.anaptecs.jeaf.rest.executor.impl.config.RESTClientConfiguration;
 import com.anaptecs.jeaf.rest.executor.impl.config.yaml.YAMLBasedRESTClientConfigurationLoader;
@@ -40,7 +41,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
  * @author JEAF Development Team
  */
 public class RESTRequestExecutorServiceProviderImpl extends AbstractApacheHttpClientRESTRequestExecutorBase implements
-    ServiceProviderImplementation {
+    RESTRequestExecutorServiceProvider, ServiceProviderImplementation {
 
   /**
    * Reference to the object that identifies this component. The reference is never null.

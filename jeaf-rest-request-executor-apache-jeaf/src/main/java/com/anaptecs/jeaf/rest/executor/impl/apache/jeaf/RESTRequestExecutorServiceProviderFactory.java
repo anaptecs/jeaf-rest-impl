@@ -8,6 +8,7 @@ package com.anaptecs.jeaf.rest.executor.impl.apache.jeaf;
 import com.anaptecs.jeaf.core.api.ServiceProvider;
 import com.anaptecs.jeaf.core.servicechannel.api.ServiceProviderFactory;
 import com.anaptecs.jeaf.core.spi.ServiceProviderImplementation;
+import com.anaptecs.jeaf.rest.executor.api.jeaf.RESTRequestExecutorServiceProvider;
 
 /**
  * This class is the factory class the service provider implementation ProductServiceRESTProxyServiceProviderImpl().
@@ -43,6 +44,6 @@ public final class RESTRequestExecutorServiceProviderFactory extends ServiceProv
    * @see com.anaptecs.jeaf.core.servicechannel.api.ServiceProviderFactory#getServiceProviderInterface()
    */
   public Class<? extends ServiceProvider> getServiceProviderInterface( ) {
-    return RESTRequestExecutorServiceProviderImpl.class;
+    return RESTRequestExecutorServiceProvider.class;
   }
 }
