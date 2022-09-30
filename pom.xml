@@ -26,10 +26,13 @@
 	
 	<properties>
 		<jeaf.rest.api.version>1.6.1-RC01-SNAPSHOT</jeaf.rest.api.version>
+		<jeaf.json.api.version>1.6.16-SNAPSHOT</jeaf.json.api.version>
+		<jeaf.core.api.version>1.6.19</jeaf.core.api.version>
 	</properties>
 	
 	<modules>
 		<module>jeaf-rest-request-executor-apache-base</module>
+		<module>jeaf-rest-request-executor-apache-jeaf</module>
 		<module>jeaf-rest-request-executor-apache-spring</module>
 	</modules>
 
