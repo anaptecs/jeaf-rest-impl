@@ -43,6 +43,20 @@ public interface RESTClientConfiguration {
   public List<String> getSensitiveHeaderNames( );
 
   /**
+   * Method returns if requests should be traced or not
+   * 
+   * @return boolean Method returns <code>true</code> if request should be traced and <code>false</code> otherwise.
+   */
+  public boolean traceRequests( );
+
+  /**
+   * Method returns if responses should be traced or not
+   * 
+   * @return boolean Method returns <code>true</code> if responses should be traced and <code>false</code> otherwise.
+   */
+  public boolean traceResponses( );
+
+  /**
    * Method returns the maximum size of the connection pool.
    * 
    * @return int Maximum pool size.
@@ -109,20 +123,6 @@ public interface RESTClientConfiguration {
    * @return int Connection request timeout in milliseconds.
    */
   public int getConnectionRequestTimeout( );
-
-  /**
-   * Method returns if requests should be traced or not
-   * 
-   * @return boolean Method returns <code>true</code> if request should be traced and <code>false</code> otherwise.
-   */
-  public boolean traceRequests( );
-
-  /**
-   * Method returns if responses should be traced or not
-   * 
-   * @return boolean Method returns <code>true</code> if responses should be traced and <code>false</code> otherwise.
-   */
-  public boolean traceResponses( );
 
   /**
    * Method returns the failure rate threshold (percent of requests) defines which amount of failed request must be

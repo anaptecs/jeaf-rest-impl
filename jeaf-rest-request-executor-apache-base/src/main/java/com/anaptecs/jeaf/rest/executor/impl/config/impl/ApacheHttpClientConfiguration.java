@@ -148,4 +148,41 @@ public class ApacheHttpClientConfiguration {
   public int getConnectionRequestTimeout( ) {
     return connectionRequestTimeout;
   }
+
+  public void setMaxPoolSize( int pMaxPoolSize ) {
+    maxPoolSize = pMaxPoolSize;
+  }
+
+  public void setMaxIdleConnections( int pMaxIdleConnections ) {
+    maxIdleConnections = pMaxIdleConnections;
+  }
+
+  public void setKeepAliveDuration( int pKeepAliveDuration ) {
+    keepAliveDuration = pKeepAliveDuration;
+  }
+
+  public void setValidateAfterInactivityDuration( int pValidateAfterInactivityDuration ) {
+    validateAfterInactivityDuration = pValidateAfterInactivityDuration;
+  }
+
+  public void setMaxRetries( int pMaxRetries ) {
+    maxRetries = pMaxRetries;
+  }
+
+  public void setRetryInterval( int pRetryInterval ) {
+    retryInterval = pRetryInterval;
+  }
+
+  public void setResponseTimeout( int pResponseTimeout ) {
+    responseTimeout = pResponseTimeout;
+  }
+
+  public void setConnectTimeout( int pConnectTimeout ) {
+    connectTimeout = pConnectTimeout;
+  }
+
+  public void setConnectionRequestTimeout( int pConnectionRequestTimeout ) {
+    connectionRequestTimeout = pConnectionRequestTimeout;
+  }
+
 }

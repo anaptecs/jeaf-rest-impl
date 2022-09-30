@@ -23,7 +23,6 @@ import com.anaptecs.jeaf.rest.executor.api.RESTRequestExecutor;
 import com.anaptecs.jeaf.rest.executor.api.jeaf.RESTRequestExecutorServiceProvider;
 import com.anaptecs.jeaf.rest.executor.impl.apache.AbstractApacheHttpClientRESTRequestExecutorBase;
 import com.anaptecs.jeaf.rest.executor.impl.config.RESTClientConfiguration;
-import com.anaptecs.jeaf.rest.executor.impl.config.yaml.YAMLBasedRESTClientConfigurationLoader;
 import com.anaptecs.jeaf.tools.api.http.HTTPStatusCode;
 import com.anaptecs.jeaf.xfun.api.XFun;
 import com.anaptecs.jeaf.xfun.api.common.ComponentID;
@@ -113,8 +112,8 @@ public class RESTRequestExecutorServiceProviderImpl extends AbstractApacheHttpCl
 
   private RESTClientConfiguration loadConfiguration( Class<?> pServiceClass ) {
     // We expect a YAML file with same name as service to be located in the class path.
-    String lResourceFileName = pServiceClass.getSimpleName().toLowerCase() + "-rest-client.yaml";
-    return YAMLBasedRESTClientConfigurationLoader.loadConfiguration(lResourceFileName);
+    String lResourceFileName = pServiceClass.getSimpleName().toLowerCase() + "-rest-client.properties";
+    return PropertiesBasedRESTClientConfigurationLoader.loadConfiguration(lResourceFileName);
   }
 
   @Override
@@ -175,7 +174,7 @@ public class RESTRequestExecutorServiceProviderImpl extends AbstractApacheHttpCl
     lProblemBuilder.setTitle(lStatusCode.getName());
     lProblemBuilder.setType(pRequestURI.toString());
     lProblemBuilder.setDetail(pException.getMessage());
-    return new RESTProblemException(lProblemBuilder.build());
+    return new RESTProblemException(lProblemBuilder.build(), pException);
   }
 
 }

@@ -12,7 +12,7 @@ import com.anaptecs.jeaf.rest.executor.impl.config.RESTClientConfiguration;
  * 
  * @author JEAF Development Team
  */
-public class Resilience4JConfiguration {
+public class CircuitBreakerConfiguration {
   /**
    * Failure rate threshold (percent of requests) defines which amount of failed request must be exceeded due to
    * technical problems that the circuit breaker opens and no further request will be sent to the REST service.
@@ -125,4 +125,29 @@ public class Resilience4JConfiguration {
   public int getSlidingWindowSizeSeconds( ) {
     return slidingWindowSizeSeconds;
   }
+
+  public void setFailureRateThreshold( int pFailureRateThreshold ) {
+    failureRateThreshold = pFailureRateThreshold;
+  }
+
+  public void setDurationInOpenState( int pDurationInOpenState ) {
+    durationInOpenState = pDurationInOpenState;
+  }
+
+  public void setSlowRequestDuration( int pSlowRequestDuration ) {
+    slowRequestDuration = pSlowRequestDuration;
+  }
+
+  public void setSlowRequestRateThreshold( int pSlowRequestRateThreshold ) {
+    slowRequestRateThreshold = pSlowRequestRateThreshold;
+  }
+
+  public void setPermittedCallsInHalfOpenState( int pPermittedCallsInHalfOpenState ) {
+    permittedCallsInHalfOpenState = pPermittedCallsInHalfOpenState;
+  }
+
+  public void setSlidingWindowSizeSeconds( int pSlidingWindowSizeSeconds ) {
+    slidingWindowSizeSeconds = pSlidingWindowSizeSeconds;
+  }
+
 }

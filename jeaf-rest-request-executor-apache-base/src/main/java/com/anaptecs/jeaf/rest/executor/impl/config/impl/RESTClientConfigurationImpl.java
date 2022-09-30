@@ -58,7 +58,7 @@ public class RESTClientConfigurationImpl implements RESTClientConfiguration {
   /**
    * Configuration for Resilience4J circuit breaker.
    */
-  private Resilience4JConfiguration circuitBreakerConfiguration = new Resilience4JConfiguration();
+  private CircuitBreakerConfiguration circuitBreakerConfiguration = new CircuitBreakerConfiguration();
 
   /**
    * Method validates this configuration object if all required configuration parameters as set.
@@ -68,6 +68,13 @@ public class RESTClientConfigurationImpl implements RESTClientConfiguration {
       throw new IllegalArgumentException(
           "Mandatory configuration parameter 'externalServiceURL' is not set. Please fix your configuration and try again.");
     }
+  }
+
+  /**
+   * Initialize object. This constructor is intended to be used in cases where properties are set via reflection based
+   * e.g. when deserializing an object using YAML libraries.
+   */
+  public RESTClientConfigurationImpl( ) {
   }
 
   /**
@@ -98,6 +105,10 @@ public class RESTClientConfigurationImpl implements RESTClientConfiguration {
   @Override
   public String getCookiePath( ) {
     return cookiePath;
+  }
+
+  public List<String> getSensitiveHeaders( ) {
+    return sensitiveHeaders;
   }
 
   /**
@@ -307,5 +318,37 @@ public class RESTClientConfigurationImpl implements RESTClientConfiguration {
   @Override
   public int getSlidingWindowSizeSeconds( ) {
     return circuitBreakerConfiguration.getSlidingWindowSizeSeconds();
+  }
+
+  public void setExternalServiceURL( String pExternalServiceURL ) {
+    externalServiceURL = pExternalServiceURL;
+  }
+
+  public void setCookieDomain( String pCookieDomain ) {
+    cookieDomain = pCookieDomain;
+  }
+
+  public void setCookiePath( String pCookiePath ) {
+    cookiePath = pCookiePath;
+  }
+
+  public void setSensitiveHeaders( List<String> pSensitiveHeaders ) {
+    sensitiveHeaders = pSensitiveHeaders;
+  }
+
+  public void setTraceRequests( boolean pTraceRequests ) {
+    traceRequests = pTraceRequests;
+  }
+
+  public void setTraceResponses( boolean pTraceResponses ) {
+    traceResponses = pTraceResponses;
+  }
+
+  public void setHttpClientConfiguration( ApacheHttpClientConfiguration pHttpClientConfiguration ) {
+    httpClientConfiguration = pHttpClientConfiguration;
+  }
+
+  public void setCircuitBreakerConfiguration( CircuitBreakerConfiguration pCircuitBreakerConfiguration ) {
+    circuitBreakerConfiguration = pCircuitBreakerConfiguration;
   }
 }
