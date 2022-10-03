@@ -10,6 +10,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.junit.jupiter.api.Test;
 
 import com.anaptecs.jeaf.rest.executor.impl.config.ApacheHttpClientConfiguration;
+import com.anaptecs.jeaf.rest.executor.impl.config.CircuitBreakerConfiguration;
 
 public class ConfigurationTest {
   @Test
@@ -46,5 +47,31 @@ public class ConfigurationTest {
     assertEquals(100, lHttpClientConfiguration.getRetryInterval());
     assertEquals(10000, lHttpClientConfiguration.getValidateAfterInactivityDuration());
 
+  }
+
+  @Test
+  void testCircuitBreakerConfiguration( ) {
+    CircuitBreakerConfiguration lCircuitBreakerConfiguration = new CircuitBreakerConfiguration();
+    lCircuitBreakerConfiguration.setDurationInOpenState(47);
+    assertEquals(47, lCircuitBreakerConfiguration.getDurationInOpenState());
+    lCircuitBreakerConfiguration.setFailureRateThreshold(80);
+    assertEquals(80, lCircuitBreakerConfiguration.getFailureRateThreshold());
+    lCircuitBreakerConfiguration.setPermittedCallsInHalfOpenState(18);
+    assertEquals(18, lCircuitBreakerConfiguration.getPermittedCallsInHalfOpenState());
+    lCircuitBreakerConfiguration.setSlidingWindowSizeSeconds(60);
+    assertEquals(60, lCircuitBreakerConfiguration.getSlidingWindowSizeSeconds());
+    lCircuitBreakerConfiguration.setSlowRequestDuration(55555);
+    assertEquals(55555, lCircuitBreakerConfiguration.getSlowRequestDuration());
+    lCircuitBreakerConfiguration.setSlowRequestRateThreshold(99);
+    assertEquals(99, lCircuitBreakerConfiguration.getSlowRequestRateThreshold());
+
+    // Test default values
+    lCircuitBreakerConfiguration = new CircuitBreakerConfiguration();
+    assertEquals(20000, lCircuitBreakerConfiguration.getDurationInOpenState());
+    assertEquals(5, lCircuitBreakerConfiguration.getFailureRateThreshold());
+    assertEquals(2, lCircuitBreakerConfiguration.getPermittedCallsInHalfOpenState());
+    assertEquals(5, lCircuitBreakerConfiguration.getSlidingWindowSizeSeconds());
+    assertEquals(5000, lCircuitBreakerConfiguration.getSlowRequestDuration());
+    assertEquals(30, lCircuitBreakerConfiguration.getSlowRequestRateThreshold());
   }
 }
