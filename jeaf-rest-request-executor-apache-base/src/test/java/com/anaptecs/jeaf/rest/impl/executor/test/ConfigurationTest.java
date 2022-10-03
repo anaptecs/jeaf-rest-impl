@@ -16,7 +16,7 @@ import com.anaptecs.jeaf.rest.executor.impl.config.ApacheHttpClientConfiguration
 import com.anaptecs.jeaf.rest.executor.impl.config.CircuitBreakerConfiguration;
 import com.anaptecs.jeaf.rest.executor.impl.config.RESTClientConfigurationImpl;
 
-public class ConfigurationTest {
+class ConfigurationTest {
   @Test
   void testApacheConfiguration( ) {
     ApacheHttpClientConfiguration lHttpClientConfiguration = new ApacheHttpClientConfiguration();

@@ -15,6 +15,13 @@ import com.anaptecs.jeaf.xfun.api.XFun;
 import com.anaptecs.jeaf.xfun.api.config.Configuration;
 
 public class PropertiesBasedRESTClientConfigurationLoader {
+  /**
+   * Instances of this class do not make sense.
+   */
+  private PropertiesBasedRESTClientConfigurationLoader( ) {
+    // Nothing to do.
+  }
+
   public static RESTClientConfiguration loadConfiguration( String pResource ) {
     // Load configuration.
     Configuration lResourceConfig = XFun.getConfigurationProvider().getResourceConfiguration(pResource);

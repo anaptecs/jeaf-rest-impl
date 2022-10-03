@@ -69,13 +69,6 @@ public class RESTClientConfigurationImpl implements RESTClientConfiguration {
   }
 
   /**
-   * Initialize object. This constructor is intended to be used in cases where properties are set via reflection based
-   * e.g. when deserializing an object using YAML libraries.
-   */
-  public RESTClientConfigurationImpl( ) {
-  }
-
-  /**
    * Method returns the URL of the REST service that is proxied by this service implementation.
    * 
    * @return String URL of the REST service. The Method never returns null.

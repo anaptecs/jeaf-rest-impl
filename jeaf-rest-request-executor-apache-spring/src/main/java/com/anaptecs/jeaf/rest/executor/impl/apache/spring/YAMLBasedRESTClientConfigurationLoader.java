@@ -21,6 +21,13 @@ import com.anaptecs.jeaf.rest.executor.impl.config.RESTClientConfigurationImpl;
  * @author JEAF Development Team
  */
 public class YAMLBasedRESTClientConfigurationLoader {
+  /**
+   * Instances of this class do not make sense.
+   */
+  private YAMLBasedRESTClientConfigurationLoader( ) {
+    // Nothing to do.
+  }
+
   public static RESTClientConfiguration loadConfiguration( String pResource ) {
     Constructor lConstructor = new Constructor(RESTClientConfigurationImpl.class);
     Yaml lYAML = new Yaml(lConstructor);

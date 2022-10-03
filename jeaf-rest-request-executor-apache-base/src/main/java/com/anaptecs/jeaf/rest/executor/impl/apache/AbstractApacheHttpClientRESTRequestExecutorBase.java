@@ -558,14 +558,17 @@ public abstract class AbstractApacheHttpClientRESTRequestExecutorBase implements
       List<String> lSensitiveHeaderNames = pConfiguration.getSensitiveHeaderNames();
       lBuilder.append("Response Headers: ");
       for (Header lNextHeader : pResponse.getHeaders()) {
-        // For security reasons sensitive headers have to be filtered out from tracing.
+        lBuilder.append(lNextHeader.getName());
+        lBuilder.append("='");
+        // For security reasons sensitive headers must not be written to traces.
         if (lSensitiveHeaderNames.contains(lNextHeader.getName().toLowerCase()) == false) {
-          lBuilder.append(lNextHeader.getName());
-          lBuilder.append("='");
           lBuilder.append(lNextHeader.getValue());
-          lBuilder.append("' ");
         }
-        // TODO: Write sensitive headers to log but without value e.g. '***'
+        // Write sensitive headers to log but without value e.g. '***'
+        else {
+          lBuilder.append("***");
+        }
+        lBuilder.append("'");
       }
       lBuilder.append(System.lineSeparator());
       // Add body if request has one.
