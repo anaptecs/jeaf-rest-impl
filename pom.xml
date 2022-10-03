@@ -11,7 +11,7 @@
 
 	<groupId>com.anaptecs.jeaf.rest</groupId>
 	<artifactId>jeaf-rest-impl-project</artifactId>
-	<version>1.6.1-RC01-SNAPSHOT</version>
+	<version>1.6.1-RC02-SNAPSHOT</version>
 	<packaging>pom</packaging>
 	<name>JEAF REST Impl Project</name>
 	<description>JEAF REST Impl different types of implements for the API that is defined by JEAF REST API projects.</description>
@@ -25,7 +25,7 @@
 	</scm>
 	
 	<properties>
-		<jeaf.rest.api.version>1.6.1-RC01-SNAPSHOT</jeaf.rest.api.version>
+		<jeaf.rest.api.version>1.6.1-RC02</jeaf.rest.api.version>
 		<jeaf.json.api.version>1.6.16-SNAPSHOT</jeaf.json.api.version>
 		<jeaf.core.api.version>1.6.19</jeaf.core.api.version>
 	</properties>
