@@ -5,12 +5,16 @@
  */
 package com.anaptecs.jeaf.rest.impl.executor.test;
 
+import static org.junit.Assert.fail;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import java.util.Arrays;
 
 import org.junit.jupiter.api.Test;
 
 import com.anaptecs.jeaf.rest.executor.impl.config.ApacheHttpClientConfiguration;
 import com.anaptecs.jeaf.rest.executor.impl.config.CircuitBreakerConfiguration;
+import com.anaptecs.jeaf.rest.executor.impl.config.RESTClientConfigurationImpl;
 
 public class ConfigurationTest {
   @Test
@@ -73,5 +77,117 @@ public class ConfigurationTest {
     assertEquals(5, lCircuitBreakerConfiguration.getSlidingWindowSizeSeconds());
     assertEquals(5000, lCircuitBreakerConfiguration.getSlowRequestDuration());
     assertEquals(30, lCircuitBreakerConfiguration.getSlowRequestRateThreshold());
+  }
+
+  @Test
+  void testRESTClientConfiguration( ) {
+    RESTClientConfigurationImpl lClientConfiguration = new RESTClientConfigurationImpl();
+    lClientConfiguration.setCookieDomain("localhost");
+    lClientConfiguration.setCookiePath("/cookies");
+    lClientConfiguration.setExternalServiceURL("http://localhost:8080");
+    lClientConfiguration.setSensitiveHeaders(Arrays.asList("Hello", "World"));
+    lClientConfiguration.setTraceRequests(false);
+    lClientConfiguration.setTraceResponses(true);
+
+    ApacheHttpClientConfiguration lHttpClientConfiguration = new ApacheHttpClientConfiguration();
+    lHttpClientConfiguration.setConnectionRequestTimeout(47);
+    lHttpClientConfiguration.setConnectTimeout(32);
+    lHttpClientConfiguration.setKeepAliveDuration(888);
+    lHttpClientConfiguration.setMaxIdleConnections(35);
+    lHttpClientConfiguration.setMaxPoolSize(89);
+    lHttpClientConfiguration.setMaxRetries(7);
+    lHttpClientConfiguration.setResponseTimeout(745);
+    lHttpClientConfiguration.setRetryInterval(333);
+    lHttpClientConfiguration.setValidateAfterInactivityDuration(9874);
+    lClientConfiguration.setHttpClientConfiguration(lHttpClientConfiguration);
+
+    CircuitBreakerConfiguration lCircuitBreakerConfiguration = new CircuitBreakerConfiguration();
+    lCircuitBreakerConfiguration.setDurationInOpenState(47);
+    lCircuitBreakerConfiguration.setFailureRateThreshold(80);
+    lCircuitBreakerConfiguration.setPermittedCallsInHalfOpenState(18);
+    lCircuitBreakerConfiguration.setSlidingWindowSizeSeconds(60);
+    lCircuitBreakerConfiguration.setSlowRequestDuration(55555);
+    lCircuitBreakerConfiguration.setSlowRequestRateThreshold(99);
+    lClientConfiguration.setCircuitBreakerConfiguration(lCircuitBreakerConfiguration);
+
+    // Test configured values
+    assertEquals("localhost", lClientConfiguration.getCookieDomain());
+    assertEquals("/cookies", lClientConfiguration.getCookiePath());
+    assertEquals("http://localhost:8080", lClientConfiguration.getExternalServiceURL());
+    assertEquals(2, lClientConfiguration.getSensitiveHeaders().size());
+    assertEquals("Hello", lClientConfiguration.getSensitiveHeaders().get(0));
+    assertEquals("World", lClientConfiguration.getSensitiveHeaders().get(1));
+    assertEquals(2, lClientConfiguration.getSensitiveHeaderNames().size());
+    assertEquals("hello", lClientConfiguration.getSensitiveHeaderNames().get(0));
+    assertEquals("world", lClientConfiguration.getSensitiveHeaderNames().get(1));
+    assertEquals(false, lClientConfiguration.traceRequests());
+    assertEquals(true, lClientConfiguration.traceResponses());
+
+    // Test http client config
+    assertEquals(47, lClientConfiguration.getConnectionRequestTimeout());
+    assertEquals(32, lClientConfiguration.getConnectTimeout());
+    assertEquals(888, lClientConfiguration.getKeepAliveDuration());
+    assertEquals(35, lClientConfiguration.getMaxIdleConnections());
+    assertEquals(89, lClientConfiguration.getMaxPoolSize());
+    assertEquals(7, lClientConfiguration.getMaxRetries());
+    assertEquals(745, lClientConfiguration.getResponseTimeout());
+    assertEquals(333, lClientConfiguration.getRetryInterval());
+    assertEquals(9874, lClientConfiguration.getValidateAfterInactivityDuration());
+
+    // Test circuit breaker config
+    assertEquals(47, lClientConfiguration.getDurationInOpenState());
+    assertEquals(80, lClientConfiguration.getFailureRateThreshold());
+    assertEquals(18, lClientConfiguration.getPermittedCallsInHalfOpenState());
+    assertEquals(60, lClientConfiguration.getSlidingWindowSizeSeconds());
+    assertEquals(55555, lClientConfiguration.getSlowRequestDuration());
+    assertEquals(99, lClientConfiguration.getSlowRequestRateThreshold());
+
+    // No exception is expected.
+    lClientConfiguration.validate();
+
+    // Test default configuration
+    lClientConfiguration = new RESTClientConfigurationImpl();
+    assertEquals(null, lClientConfiguration.getCookieDomain());
+    assertEquals(null, lClientConfiguration.getCookiePath());
+    assertEquals(null, lClientConfiguration.getExternalServiceURL());
+    assertEquals(1, lClientConfiguration.getSensitiveHeaders().size());
+    assertEquals("Authorization", lClientConfiguration.getSensitiveHeaders().get(0));
+    assertEquals(1, lClientConfiguration.getSensitiveHeaderNames().size());
+    assertEquals("authorization", lClientConfiguration.getSensitiveHeaderNames().get(0));
+    assertEquals(true, lClientConfiguration.traceRequests());
+    assertEquals(false, lClientConfiguration.traceResponses());
+
+    assertEquals(100, lClientConfiguration.getConnectionRequestTimeout());
+    assertEquals(2000, lClientConfiguration.getConnectTimeout());
+    assertEquals(20000, lClientConfiguration.getKeepAliveDuration());
+    assertEquals(5, lClientConfiguration.getMaxIdleConnections());
+    assertEquals(5, lClientConfiguration.getMaxPoolSize());
+    assertEquals(0, lClientConfiguration.getMaxRetries());
+    assertEquals(5000, lClientConfiguration.getResponseTimeout());
+    assertEquals(100, lClientConfiguration.getRetryInterval());
+    assertEquals(10000, lClientConfiguration.getValidateAfterInactivityDuration());
+
+    assertEquals(20000, lClientConfiguration.getDurationInOpenState());
+    assertEquals(5, lClientConfiguration.getFailureRateThreshold());
+    assertEquals(2, lClientConfiguration.getPermittedCallsInHalfOpenState());
+    assertEquals(5, lClientConfiguration.getSlidingWindowSizeSeconds());
+    assertEquals(5000, lClientConfiguration.getSlowRequestDuration());
+    assertEquals(30, lClientConfiguration.getSlowRequestRateThreshold());
+
+    try {
+      lClientConfiguration.validate();
+      fail();
+    }
+    catch (IllegalArgumentException e) {
+      assertEquals(
+          "Mandatory configuration parameter 'externalServiceURL' is not set. Please fix your configuration and try again.",
+          e.getMessage());
+    }
+
+    lClientConfiguration = new RESTClientConfigurationImpl();
+    lClientConfiguration.setSensitiveHeaders(null);
+    assertEquals(null, lClientConfiguration.getSensitiveHeaders());
+    assertEquals(0, lClientConfiguration.getSensitiveHeaderNames().size());
+
   }
 }
