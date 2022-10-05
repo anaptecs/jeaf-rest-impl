@@ -6,7 +6,7 @@
 	<parent>
 		<groupId>com.anaptecs.jeaf</groupId>
 		<artifactId>jeaf-module-project-parent</artifactId>
-		<version>1.6.31-SNAPSHOT</version>
+		<version>1.6.31</version>
 	</parent>
 
 	<groupId>com.anaptecs.jeaf.rest</groupId>
@@ -26,7 +26,7 @@
 	
 	<properties>
 		<jeaf.rest.api.version>1.6.1-RC02</jeaf.rest.api.version>
-		<jeaf.json.api.version>1.6.16-SNAPSHOT</jeaf.json.api.version>
+		<jeaf.json.api.version>1.6.15</jeaf.json.api.version>
 		<jeaf.core.api.version>1.6.19</jeaf.core.api.version>
 	</properties>
 	
