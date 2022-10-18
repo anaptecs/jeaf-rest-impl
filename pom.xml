@@ -35,6 +35,7 @@
 		<module>jeaf-rest-request-executor-apache-jeaf</module>
 		<module>jeaf-rest-request-executor-apache-spring</module>
 		<module>jeaf-rest-composite-type-impl-kryo</module>
+		<module>jeaf-rest-composite-type-impl-kryo-jeaf</module>
 	</modules>
 
 </project>
