@@ -11,9 +11,10 @@ import com.anaptecs.jeaf.core.spi.ServiceProviderImplementation;
 import com.anaptecs.jeaf.rest.composite.api.jeaf.CompositeTypeConverterServiceProvider;
 
 /**
- * This class is the factory class the service provider implementation ProductServiceRESTProxyServiceProviderImpl().
+ * This class is the factory class the service provider implementation
+ * {@link KryoCompositeTypeConverterServiceProviderImpl}.
  * 
- * 
+ * @author JEAF Development Team
  */
 @com.anaptecs.jeaf.core.annotations.ServiceProviderFactory
 public final class KryoCompositeTypeConverterProviderServiceProviderFactory extends ServiceProviderFactory {

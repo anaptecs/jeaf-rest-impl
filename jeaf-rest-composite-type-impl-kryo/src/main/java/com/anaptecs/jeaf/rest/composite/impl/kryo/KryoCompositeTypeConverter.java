@@ -14,6 +14,13 @@ import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.io.Output;
 
+/**
+ * Class implements a Kryo-based {@link CompositeTypeConverter}. Benefit of Kryo over JSON is that it is more efficient
+ * and less chatty. However if you require support for semantic versioning then please check
+ * <a href="https://github.com/EsotericSoftware/kryo">Kryo documentation</a>.
+ * 
+ * @author JEAF Development Team
+ */
 public class KryoCompositeTypeConverter implements CompositeTypeConverter {
 
   @Override
