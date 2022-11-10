@@ -43,13 +43,13 @@ public class KryoCompositeTypeConverter implements CompositeTypeConverter {
 
     // As it is expected we have to convert byte[] to base 64 encoded string.
     byte[] lBuffer = lByteOutputStream.toByteArray();
-    return Base64.getEncoder().encodeToString(lBuffer);
+    return Base64.getUrlEncoder().encodeToString(lBuffer);
   }
 
   @Override
   public <T> T deserializeObject( String pSerializedObject, Class<T> pResultType, List<Class<?>> pSerializedClasses ) {
     // Decode serialized object as we work with base 64 encoding
-    byte[] lDecodedObject = Base64.getDecoder().decode(pSerializedObject);
+    byte[] lDecodedObject = Base64.getUrlDecoder().decode(pSerializedObject);
     Kryo lKryo = this.getKryoInstance(pSerializedClasses);
     Input lInput = new Input(lDecodedObject);
     return lKryo.readObject(lInput, pResultType);
