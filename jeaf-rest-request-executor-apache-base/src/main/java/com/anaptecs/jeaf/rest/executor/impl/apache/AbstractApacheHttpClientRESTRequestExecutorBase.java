@@ -254,7 +254,8 @@ public abstract class AbstractApacheHttpClientRESTRequestExecutorBase implements
         T lResultObject;
         HttpEntity lEntity = lResponse.getEntity();
 
-        //
+        // Check if there is a response. Due to behavior of Spring that in case of stream does not return the actual
+        // size we just check for zero length.
         if (pResponseType != null && lEntity.getContentLength() != 0) {
           // Check if response logging is active.
           if (this.isResponseTracingEnabled(lConfiguration)) {
