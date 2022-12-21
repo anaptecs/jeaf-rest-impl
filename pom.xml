@@ -25,7 +25,7 @@
 	</scm>
 	
 	<properties>
-		<jeaf.rest.api.version>1.6.2</jeaf.rest.api.version>
+		<jeaf.rest.api.version>1.6.3-SNAPSHOT</jeaf.rest.api.version>
 		<jeaf.json.api.version>1.6.15</jeaf.json.api.version>
 		<jeaf.core.api.version>1.6.19</jeaf.core.api.version>
 	</properties>

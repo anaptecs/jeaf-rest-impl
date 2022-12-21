@@ -16,7 +16,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.Set;
 import java.util.concurrent.Callable;
 
 import org.apache.hc.client5.http.config.RequestConfig;
@@ -321,7 +320,7 @@ public abstract class AbstractApacheHttpClientRESTRequestExecutorBase implements
       lRequestURI = lRequestBuilder.getUri();
 
       // Set query params
-      for (Entry<String, Set<String>> lNextQueryParam : pRequest.getQueryParams().entrySet()) {
+      for (Entry<String, List<String>> lNextQueryParam : pRequest.getQueryParameters().entrySet()) {
         // As the might be multiple values for one query param we have to lopp over all passed values.
         for (String lNextValue : lNextQueryParam.getValue()) {
           lRequestBuilder.addParameter(lNextQueryParam.getKey(), lNextValue);
@@ -329,8 +328,17 @@ public abstract class AbstractApacheHttpClientRESTRequestExecutorBase implements
       }
 
       // Set HTTP header(s)
-      for (Entry<String, String> lNextHeader : pRequest.getHeaders().entrySet()) {
-        lRequestBuilder.addHeader(lNextHeader.getKey(), lNextHeader.getValue());
+      for (Entry<String, List<String>> lNextHeader : pRequest.getHeaderFields().entrySet()) {
+        String lHeaderName = lNextHeader.getKey();
+        List<String> lHeaderValues = lNextHeader.getValue();
+        if (lHeaderValues != null && lHeaderValues.size() > 0) {
+          for (String lNextValue : lHeaderValues) {
+            lRequestBuilder.addHeader(lHeaderName, lNextValue);
+          }
+        }
+        else {
+          lRequestBuilder.addHeader(lHeaderName, null);
+        }
       }
 
       // Resolve content type and add it to http header as well
