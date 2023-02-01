@@ -121,7 +121,7 @@ public class RESTRequestExecutorServiceProviderImpl extends AbstractApacheHttpCl
     // Try to read error response from body
     String lResponseBody;
     HttpEntity lEntity = pResponse.getEntity();
-    if (lEntity.getContentLength() > 0) {
+    if (lEntity != null && lEntity.getContentLength() > 0) {
       try {
         lResponseBody = this.getContent(pResponse.getEntity().getContent());
       }
