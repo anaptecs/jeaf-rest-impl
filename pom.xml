@@ -25,7 +25,9 @@
 	</scm>
 	
 	<properties>
-		<jeaf.rest.api.version>1.6.4</jeaf.rest.api.version>
+		<jeaf.tools.api.version>1.6.20</jeaf.tools.api.version>
+		<jeaf.x-fun.impl.version>1.6.23</jeaf.x-fun.impl.version>
+		<jeaf.rest.api.version>1.6.5-SNAPSHOT</jeaf.rest.api.version>
 		<jeaf.json.api.version>1.6.15</jeaf.json.api.version>
 		<jeaf.core.api.version>1.6.19</jeaf.core.api.version>
 	</properties>
@@ -34,6 +36,8 @@
 		<module>jeaf-rest-request-executor-apache-base</module>
 		<module>jeaf-rest-request-executor-apache-jeaf</module>
 		<module>jeaf-rest-request-executor-apache-spring</module>
+		<module>jeaf-rest-resource-impl</module>
+		<module>jeaf-rest-resource-impl-jeaf</module>
 		<module>jeaf-rest-composite-type-impl-kryo</module>
 		<module>jeaf-rest-composite-type-impl-kryo-jeaf</module>
 	</modules>
