@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>com.anaptecs.jeaf.rest</groupId>
+		<artifactId>jeaf-rest-impl-project</artifactId>
+		<version>1.6.5-SNAPSHOT</version>
+	</parent>
+
+	<name>JEAF REST Resource Impl</name>
+	<artifactId>jeaf-rest-resource-impl</artifactId>
+	<packaging>jar</packaging>
+	
+	<dependencies>
+		<dependency>
+			<groupId>com.anaptecs.jeaf.rest</groupId>
+			<artifactId>jeaf-rest-resource-api</artifactId>
+			<version>1.6.5-SNAPSHOT</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>com.anaptecs.jeaf.tools</groupId>
+			<artifactId>jeaf-tools-api</artifactId>
+			<version>${jeaf.tools.api.version}</version>
+		</dependency>
+
+		<!-- Runtime dependencies -->
+		<dependency>
+			<groupId>com.anaptecs.jeaf.x-fun</groupId>
+			<artifactId>jeaf-x-fun-default-runtime</artifactId>
+			<version>${jeaf.x-fun.impl.version}</version>
+			<scope>test</scope>
+			<type>pom</type>
+		</dependency>
+		
+	</dependencies>
+</project>
