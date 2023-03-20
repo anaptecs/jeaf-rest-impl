@@ -15,7 +15,7 @@
 		<dependency>
 			<groupId>com.anaptecs.jeaf.rest</groupId>
 			<artifactId>jeaf-rest-resource-api</artifactId>
-			<version>1.6.5-SNAPSHOT</version>
+			<version>${jeaf.rest.api.version}</version>
 		</dependency>
 		
 		<dependency>
