@@ -6,7 +6,7 @@
 	<parent>
 		<groupId>com.anaptecs.jeaf</groupId>
 		<artifactId>jeaf-module-project-parent</artifactId>
-		<version>1.6.33</version>
+		<version>1.8.0</version>
 	</parent>
 
 	<groupId>com.anaptecs.jeaf.rest</groupId>
@@ -25,11 +25,11 @@
 	</scm>
 	
 	<properties>
-		<jeaf.tools.api.version>1.6.20</jeaf.tools.api.version>
-		<jeaf.x-fun.impl.version>1.6.23</jeaf.x-fun.impl.version>
-		<jeaf.rest.api.version>1.6.6</jeaf.rest.api.version>
-		<jeaf.json.api.version>1.6.15</jeaf.json.api.version>
-		<jeaf.core.api.version>1.6.19</jeaf.core.api.version>
+		<jeaf.tools.api.version>1.8.0</jeaf.tools.api.version>
+		<jeaf.x-fun.impl.version>1.8.0</jeaf.x-fun.impl.version>
+		<jeaf.rest.api.version>1.8.0</jeaf.rest.api.version>
+		<jeaf.json.api.version>1.8.0</jeaf.json.api.version>
+		<jeaf.core.api.version>1.8.0</jeaf.core.api.version>
 	</properties>
 	
 	<modules>
