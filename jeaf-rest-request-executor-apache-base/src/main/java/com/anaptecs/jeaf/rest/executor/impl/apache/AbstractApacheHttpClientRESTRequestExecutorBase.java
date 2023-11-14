@@ -48,11 +48,15 @@ import org.apache.hc.core5.util.TimeValue;
 import org.apache.hc.core5.util.Timeout;
 
 import com.anaptecs.jeaf.rest.executor.api.HttpMethod;
+import com.anaptecs.jeaf.rest.executor.api.ObjectType;
+import com.anaptecs.jeaf.rest.executor.api.ObjectType.GenericsObjectType;
+import com.anaptecs.jeaf.rest.executor.api.ObjectType.SingleObjectType;
 import com.anaptecs.jeaf.rest.executor.api.RESTRequest;
 import com.anaptecs.jeaf.rest.executor.api.RESTRequestExecutor;
 import com.anaptecs.jeaf.rest.executor.impl.config.RESTClientConfiguration;
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.type.TypeFactory;
 
 import io.github.resilience4j.circuitbreaker.CircuitBreaker;
 import io.github.resilience4j.circuitbreaker.CircuitBreakerConfig;
@@ -185,7 +189,16 @@ public abstract class AbstractApacheHttpClientRESTRequestExecutorBase implements
       Class<T> pTypeClass ) {
 
     // Create matching response type as defined by the passed parameters
-    JavaType lResponseType = this.getObjectMapper().getTypeFactory().constructType(pTypeClass);
+    ObjectType lObjectType = ObjectType.createObjectType(pTypeClass);
+    return this.executeSingleObjectResultRequest(pRequest, pSuccessfulStatusCode, lObjectType);
+  }
+
+  @Override
+  public <T> T executeSingleObjectResultRequest( RESTRequest pRequest, int pSuccessfulStatusCode,
+      ObjectType pObjectType ) {
+
+    // Create matching response type as defined by the passed parameters
+    JavaType lResponseType = this.getJavaType(pObjectType);
 
     // Execute request and return result.
     Class<?> lServiceClass = pRequest.getServiceClass();
@@ -197,11 +210,22 @@ public abstract class AbstractApacheHttpClientRESTRequestExecutorBase implements
 
   @Override
   public final <T> T executeCollectionResultRequest( RESTRequest pRequest, int pSuccessfulStatusCode,
-      @SuppressWarnings("rawtypes") Class<? extends Collection> pCollectionClass, Class<?> pTypeClass ) {
+      @SuppressWarnings("rawtypes")
+      Class<? extends Collection> pCollectionClass, Class<?> pTypeClass ) {
+
+    // Create matching response type for collections as defined by the passed parameters
+    ObjectType lObjectType = ObjectType.createObjectType(pTypeClass);
+    return this.executeCollectionResultRequest(pRequest, pSuccessfulStatusCode, pCollectionClass, lObjectType);
+  }
+
+  @Override
+  public <T> T executeCollectionResultRequest( RESTRequest pRequest, int pSuccessfulStatusCode,
+      @SuppressWarnings("rawtypes")
+      Class<? extends Collection> pCollectionClass, ObjectType pObjectType ) {
 
     // Create matching response type for collections as defined by the passed parameters
     JavaType lResponseType = this.getObjectMapper().getTypeFactory().constructCollectionType(pCollectionClass,
-        pTypeClass);
+        this.getJavaType(pObjectType));
 
     // Execute request and return result.
     Class<?> lServiceClass = pRequest.getServiceClass();
@@ -288,8 +312,8 @@ public abstract class AbstractApacheHttpClientRESTRequestExecutorBase implements
     // IOException can result from communication or serialization problems. Thanks to circuit breaker interface
     // definition of Resilience4J we also have to catch java.lang.Exception ;-(
     catch (Exception e) {
-      throw this.processInternalServerError(lRequestURI, e, "Exception occurred when try to call REST Service "
-          + pRequest.toString());
+      throw this.processInternalServerError(lRequestURI, e,
+          "Exception occurred when try to call REST Service " + pRequest.toString());
     }
     // No matter what happened we have at least close the http response if possible.
     finally {
@@ -298,9 +322,8 @@ public abstract class AbstractApacheHttpClientRESTRequestExecutorBase implements
           lResponse.close();
         }
         catch (IOException e) {
-          this.traceException(
-              "Unable to close http client response from REST Service " + this.getConfiguration(pServiceClass)
-                  .getExternalServiceURL(), e);
+          this.traceException("Unable to close http client response from REST Service "
+              + this.getConfiguration(pServiceClass).getExternalServiceURL(), e);
         }
       }
     }
@@ -363,8 +386,7 @@ public abstract class AbstractApacheHttpClientRESTRequestExecutorBase implements
     }
   }
 
-  private HttpContext createHttpContext( RESTRequest pRequest,
-      RESTClientConfiguration pConfiguration ) {
+  private HttpContext createHttpContext( RESTRequest pRequest, RESTClientConfiguration pConfiguration ) {
     // HttpContext is only need in case that request has cookies.
     Map<String, String> lCookies = pRequest.getCookies();
     HttpContext lLocalContext;
@@ -606,5 +628,30 @@ public abstract class AbstractApacheHttpClientRESTRequestExecutorBase implements
       lBytes.write(lBuffer, 0, lBytesRead);
     }
     return new String(lBytes.toByteArray());
+  }
+
+  /**
+   * Method uses the passed {@link ObjectType} to creating a Jackson type definition that can be used for
+   * deserialization.
+   * 
+   * @param pObjectType Response type that should be used to create matching Jackson {@link JavaType}
+   * @return {@link JavaType} JavaType that was created using the passed response type. The method never returns null.
+   */
+  private JavaType getJavaType( ObjectType pObjectType ) {
+    TypeFactory lTypeFactory = this.getObjectMapper().getTypeFactory();
+
+    JavaType lJavaType;
+    if (pObjectType instanceof SingleObjectType) {
+      lJavaType = lTypeFactory.constructType(((SingleObjectType) pObjectType).getObjectType());
+    }
+    else if (pObjectType instanceof GenericsObjectType) {
+      GenericsObjectType lGenericsObjectType = (GenericsObjectType) pObjectType;
+      lJavaType = lTypeFactory.constructParametricType(lGenericsObjectType.getGenericType(),
+          lGenericsObjectType.getParameterType());
+    }
+    else {
+      throw new IllegalArgumentException("Unexpected ResponseType implementation " + pObjectType.getClass().getName());
+    }
+    return lJavaType;
   }
 }
