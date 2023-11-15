@@ -650,7 +650,7 @@ public abstract class AbstractApacheHttpClientRESTRequestExecutorBase implements
           lGenericsObjectType.getParameterType());
     }
     else {
-      throw new IllegalArgumentException("Unexpected ResponseType implementation " + pObjectType.getClass().getName());
+      throw new IllegalArgumentException("Unexpected ObjectType implementation " + pObjectType.getClass().getName());
     }
     return lJavaType;
   }
