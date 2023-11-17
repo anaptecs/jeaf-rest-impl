@@ -185,15 +185,6 @@ public abstract class AbstractApacheHttpClientRESTRequestExecutorBase implements
   }
 
   @Override
-  public final <T> T executeSingleObjectResultRequest( RESTRequest pRequest, int pSuccessfulStatusCode,
-      Class<T> pTypeClass ) {
-
-    // Create matching response type as defined by the passed parameters
-    ObjectType lObjectType = ObjectType.createObjectType(pTypeClass);
-    return this.executeSingleObjectResultRequest(pRequest, pSuccessfulStatusCode, lObjectType);
-  }
-
-  @Override
   public <T> T executeSingleObjectResultRequest( RESTRequest pRequest, int pSuccessfulStatusCode,
       ObjectType pObjectType ) {
 
@@ -206,16 +197,6 @@ public abstract class AbstractApacheHttpClientRESTRequestExecutorBase implements
     ClassicHttpRequest lHttpClientRequest = this.createHttpClientRequest(pRequest, lConfiguration);
     HttpContext lHttpContext = this.createHttpContext(pRequest, lConfiguration);
     return this.executeRequest(lServiceClass, lHttpClientRequest, lHttpContext, pSuccessfulStatusCode, lResponseType);
-  }
-
-  @Override
-  public final <T> T executeCollectionResultRequest( RESTRequest pRequest, int pSuccessfulStatusCode,
-      @SuppressWarnings("rawtypes")
-      Class<? extends Collection> pCollectionClass, Class<?> pTypeClass ) {
-
-    // Create matching response type for collections as defined by the passed parameters
-    ObjectType lObjectType = ObjectType.createObjectType(pTypeClass);
-    return this.executeCollectionResultRequest(pRequest, pSuccessfulStatusCode, pCollectionClass, lObjectType);
   }
 
   @Override
