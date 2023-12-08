@@ -51,6 +51,7 @@ import com.anaptecs.jeaf.rest.executor.api.HttpMethod;
 import com.anaptecs.jeaf.rest.executor.api.ObjectType;
 import com.anaptecs.jeaf.rest.executor.api.ObjectType.GenericsObjectType;
 import com.anaptecs.jeaf.rest.executor.api.ObjectType.SingleObjectType;
+import com.anaptecs.jeaf.rest.executor.api.ObjectType.TypeReferenceObjectType;
 import com.anaptecs.jeaf.rest.executor.api.RESTRequest;
 import com.anaptecs.jeaf.rest.executor.api.RESTRequestExecutor;
 import com.anaptecs.jeaf.rest.executor.impl.config.RESTClientConfiguration;
@@ -629,6 +630,10 @@ public abstract class AbstractApacheHttpClientRESTRequestExecutorBase implements
       GenericsObjectType lGenericsObjectType = (GenericsObjectType) pObjectType;
       lJavaType = lTypeFactory.constructParametricType(lGenericsObjectType.getGenericType(),
           lGenericsObjectType.getParameterType());
+    }
+    else if (pObjectType instanceof TypeReferenceObjectType) {
+      TypeReferenceObjectType lTypeReferenceObjectType = (TypeReferenceObjectType) pObjectType;
+      lJavaType = lTypeFactory.constructType(lTypeReferenceObjectType.getTypeReference().getType());
     }
     else {
       throw new IllegalArgumentException("Unexpected ObjectType implementation " + pObjectType.getClass().getName());
