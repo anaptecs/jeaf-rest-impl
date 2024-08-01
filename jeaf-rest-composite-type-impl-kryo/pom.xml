@@ -4,7 +4,7 @@
 	<parent>
 		<groupId>com.anaptecs.jeaf.rest</groupId>
 		<artifactId>jeaf-rest-impl-project</artifactId>
-		<version>1.11.1-SNAPSHOT</version>
+		<version>47.11.0</version>
 	</parent>
 
 	<name>JEAF REST Composite Type Impl Kryo</name>
