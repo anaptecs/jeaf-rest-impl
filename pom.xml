@@ -27,7 +27,7 @@
 	<properties>
 		<jeaf.tools.api.version>1.8.0</jeaf.tools.api.version>
 		<jeaf.x-fun.impl.version>1.8.0</jeaf.x-fun.impl.version>
-		<jeaf.rest.api.version>2.0.0-RC1-SNAPSHOT</jeaf.rest.api.version>
+		<jeaf.rest.api.version>2.0.0-RC1</jeaf.rest.api.version>
 		<jeaf.json.api.version>1.8.0</jeaf.json.api.version>
 		<jeaf.core.api.version>1.8.0</jeaf.core.api.version>
 	</properties>
