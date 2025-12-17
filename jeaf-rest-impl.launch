@@ -10,7 +10,7 @@
     <stringAttribute key="M2_RUNTIME" value="Maven 3.8.6"/>
     <booleanAttribute key="M2_SKIP_TESTS" value="false"/>
     <intAttribute key="M2_THREADS" value="1"/>
-    <booleanAttribute key="M2_UPDATE_SNAPSHOTS" value="false"/>
+    <booleanAttribute key="M2_UPDATE_SNAPSHOTS" value="true"/>
     <stringAttribute key="M2_USER_SETTINGS" value=""/>
     <booleanAttribute key="M2_WORKSPACE_RESOLUTION" value="false"/>
     <stringAttribute key="bad_container_name" value="\jeaf-rest--project"/>
@@ -21,5 +21,6 @@
     <booleanAttribute key="org.eclipse.jdt.launching.ATTR_ATTR_USE_ARGFILE" value="false"/>
     <booleanAttribute key="org.eclipse.jdt.launching.ATTR_SHOW_CODEDETAILS_IN_EXCEPTION_MESSAGES" value="true"/>
     <booleanAttribute key="org.eclipse.jdt.launching.ATTR_USE_CLASSPATH_ONLY_JAR" value="false"/>
+    <booleanAttribute key="org.eclipse.jdt.launching.ATTR_USE_START_ON_FIRST_THREAD" value="true"/>
     <stringAttribute key="org.eclipse.jdt.launching.WORKING_DIRECTORY" value="${project_loc:jeaf-rest-impl-project}"/>
 </launchConfiguration>

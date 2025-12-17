@@ -5,16 +5,15 @@
  */
 package com.anaptecs.jeaf.rest.impl.executor.test;
 
-import static org.junit.Assert.fail;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
 
 import java.util.Arrays;
-
-import org.junit.jupiter.api.Test;
 
 import com.anaptecs.jeaf.rest.executor.impl.config.ApacheHttpClientConfiguration;
 import com.anaptecs.jeaf.rest.executor.impl.config.CircuitBreakerConfiguration;
 import com.anaptecs.jeaf.rest.executor.impl.config.RESTClientConfigurationImpl;
+import org.junit.jupiter.api.Test;
 
 class ConfigurationTest {
   @Test
