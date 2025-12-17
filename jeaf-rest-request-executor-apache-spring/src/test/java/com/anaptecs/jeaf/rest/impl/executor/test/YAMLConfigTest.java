@@ -5,13 +5,12 @@
  */
 package com.anaptecs.jeaf.rest.impl.executor.test;
 
-import static org.junit.Assert.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-
-import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import com.anaptecs.jeaf.rest.executor.impl.apache.spring.YAMLBasedRESTClientConfigurationLoader;
 import com.anaptecs.jeaf.rest.executor.impl.config.RESTClientConfiguration;
+import org.junit.jupiter.api.Test;
 
 class YAMLConfigTest {
 
