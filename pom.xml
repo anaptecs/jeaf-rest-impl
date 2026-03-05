@@ -23,7 +23,14 @@
 		<url>https://github.com/anaptecs/jeaf-rest-impl.git</url>
 		<tag>HEAD</tag>
 	</scm>
-	
+
+	<distributionManagement>
+		<snapshotRepository>
+			<id>github</id>
+			<url>https://maven.pkg.github.com/anaptecs/jeaf-rest-impl</url>
+		</snapshotRepository>
+	</distributionManagement>
+
 	<properties>
 		<jeaf.tools.api.version>1.8.0</jeaf.tools.api.version>
 		<jeaf.x-fun.impl.version>1.8.0</jeaf.x-fun.impl.version>
