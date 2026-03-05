@@ -38,7 +38,7 @@
 		<jeaf.json.api.version>1.8.0</jeaf.json.api.version>
 		<jeaf.core.api.version>1.8.0</jeaf.core.api.version>
 	</properties>
-	
+
 	<modules>
 		<module>jeaf-rest-request-executor-apache-base</module>
 		<module>jeaf-rest-request-executor-apache-jeaf</module>
